@@ -1,0 +1,3 @@
+{
+  macosSettings = import ./macosSettings;
+}
