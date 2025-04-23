@@ -1,5 +1,5 @@
 {
-  outputs,
+  pkgs,
   username,
   ...
 }:
@@ -11,7 +11,7 @@
   home = {
     inherit username;
     homeDirectory = "/Users/${username}";
-    # packages = with pkgs; [];
+    packages = with pkgs; [ lima ]; # machine-specific packages
   };
 
   programs.git = {

@@ -54,11 +54,6 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      utm-vm = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs; };
-        modules = [ ./hosts/utm-vm/configuration.nix ];
-      };
-
       lima-vm = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs outputs; };
         modules = [ ./hosts/lima-vm/configuration.nix ];
@@ -82,11 +77,6 @@
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
         extraSpecialArgs = { inherit inputs outputs; };
         modules = [ ./hosts/personal-mbp/home.nix ];
-      };
-      "dennissmith@utm-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
-        extraSpecialArgs = { inherit inputs outputs; };
-        modules = [ ./hosts/utm-vm/home.nix ];
       };
       "dennissmith@lima-vm" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-linux;
