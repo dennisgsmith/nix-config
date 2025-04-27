@@ -64,8 +64,11 @@
   };
 
   environment.systemPackages = with pkgs; [
-    fswatch
     docker
+    fswatch
+    lima
+    openssh
+    sshfs
   ];
 
   homebrew = {

@@ -2,7 +2,7 @@
 {
   home.shellAliases = {
     diff = "difft";
-    ls =  "lsd";
+    ls = "lsd";
     search = "rg -p --glob '!node_modules/*'  $@";
   };
   home.packages = with pkgs; [
@@ -15,12 +15,16 @@
     jq
     ripgrep
     tree
+    vim
     unrar
     unzip
   ];
   home.sessionVariables = {
-    PATH = "$HOME/.local/share/bin:$PATH";
+    VISUAL = "vim";
+    EDITOR = "vim";
     HISTIGNORE = "pwd:ls:cd";
     HISTSIZE = 10000;
+    HISTFILESIZE = 100000;
+    PATH = "$HOME/.local/share/bin:$PATH";
   };
 }

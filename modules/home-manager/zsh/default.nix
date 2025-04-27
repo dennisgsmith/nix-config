@@ -22,7 +22,6 @@
       }
     ];
     envExtra = ''
-      EDITOR=vim
       ${lib.optionalString (lib.strings.hasSuffix "darwin" pkgs.system) "export PATH=/opt/homebrew/bin:$PATH"}
       autoload edit-command-line
       zle -N edit-command-line

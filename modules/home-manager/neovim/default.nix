@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 {
   home.shellAliases = {
     nv = "nvim";
@@ -13,8 +17,8 @@
   # xdg.configFile.nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nix-config/dotfiles/nvim/";
 
   home.sessionVariables = {
-    VISUAL="nvim";
-    EDITOR="nvim";
-    ALTERNATE_EDITOR="vim";
+    VISUAL = lib.mkForce "nvim";
+    EDITOR = lib.mkForce "nvim";
+    ALTERNATE_EDITOR = "vim";
   };
 }

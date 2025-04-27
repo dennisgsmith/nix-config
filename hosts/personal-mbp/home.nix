@@ -11,7 +11,7 @@
   home = {
     inherit username;
     homeDirectory = "/Users/${username}";
-    packages = with pkgs; [ lima ]; # machine-specific packages
+    # packages = with pkgs; [ ];
   };
 
   programs.git = {

@@ -3,7 +3,7 @@
   outputs,
   ...
 }:
-  let username = "dennissmith"; hostname = "lima-vm"; in
+  let username = "dennissmith"; hostname = "utm-vm"; in
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
@@ -16,25 +16,45 @@
       };
     }
     ../common/configuration.nix
-  ]
-  ++ builtins.attrValues outputs.nixosModules;
+    outputs.nixosModules.openssh
+    outputs.nixosModules.hyprland
+  ];
 
-  # FIXME: Add the rest of your current configuration
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = hostname;
+  networking.networkmanager.enable = true;
+
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+  };
+
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
+
+  services.printing.enable = true;
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
     ${username} = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
       initialPassword = "pass";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICKsgG1dXcJpHmB2nypeOfuF4XrVagJUZ9wtNhal22n1 dennisgsmith12@gmail.com"
       ];
-      # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
       extraGroups = [
         "wheel"
         "docker"

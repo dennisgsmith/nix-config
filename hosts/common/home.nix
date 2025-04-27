@@ -10,7 +10,7 @@ let
 in
 {
   home.sessionVariables = {
-    NIX_PATH = lib.concatStringsSep ":" (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
+    NIX_PATH=lib.concatStringsSep ":" (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
   };
 
   programs.home-manager.enable = true;
@@ -34,7 +34,6 @@ in
     direnv
     gnumake
     neofetch
-    openssh
     pandoc
     postgresql
     sqlite
