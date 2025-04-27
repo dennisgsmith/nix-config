@@ -1,11 +1,13 @@
 {
   inputs,
   outputs,
+  pkgs,
   ...
 }:
   let username = "dennissmith"; hostname = "utm-vm"; in
 {
   imports = [
+    ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;
@@ -17,7 +19,6 @@
     }
     ../common/configuration.nix
     outputs.nixosModules.openssh
-    outputs.nixosModules.hyprland
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -41,11 +42,35 @@
 
   services.xserver = {
     enable = true;
-    displayManager.gdm.enable = true;
+    displayManager = {
+      gdm.enable = true;
+      autoLogin = {
+        enable = true;
+        user = username;
+      };
+    };
     desktopManager.gnome.enable = true;
   };
 
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
+
+  services.spice-vdagentd.enable = true;
+
   services.printing.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  programs.zsh.enable = true;
+
+  environment.variables = {
+    XCURSOR_THEME = "Adwaita";
+  };
 
   # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
@@ -53,15 +78,18 @@
       initialPassword = "pass";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-        # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICKsgG1dXcJpHmB2nypeOfuF4XrVagJUZ9wtNhal22n1 dennisgsmith12@gmail.com"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEyIXnW68HdNjjbUmcDGgBfXco6nI+MwzW5qp5393Umv dennisgsmith12@gmail.com"
       ];
+      shell = pkgs.zsh;
       extraGroups = [
         "wheel"
         "docker"
+        "networkmanager"
       ];
     };
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.11";
+
 }
