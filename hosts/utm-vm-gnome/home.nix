@@ -1,5 +1,6 @@
 ### https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
 {
+  inputs,
   pkgs,
   username,
   ...
@@ -33,7 +34,6 @@
   home.packages = with pkgs; [
     gnomeExtensions.caffeine
     gnomeExtensions.space-bar
-    gnomeExtensions.disable-unredirect-fullscreen-windows # workaround
   ];
 
   ### Configure Gnome Extensions

@@ -346,7 +346,8 @@
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable",
-        "nvf": "nvf"
+        "nvf": "nvf",
+        "unredirect-fixed": "unredirect-fixed"
       }
     },
     "rust-overlay": {
@@ -398,6 +399,23 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "unredirect-fixed": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1741647542,
+        "narHash": "sha256-iZ5V7cJymEmnwhQFXJDFO96dqTFoAnq7fkUhZekbJ88=",
+        "owner": "aunetx",
+        "repo": "gnome-shell-extension-disable-unredirect",
+        "rev": "69ab9191122d8b6b5deaf4995e1db23da08bd3f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aunetx",
+        "ref": "gnome-48",
+        "repo": "gnome-shell-extension-disable-unredirect",
         "type": "github"
       }
     }
