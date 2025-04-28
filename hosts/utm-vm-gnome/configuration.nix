@@ -3,9 +3,10 @@
   outputs,
   pkgs,
   ...
-}:
-  let username = "dennissmith"; hostname = "utm-vm"; in
-{
+}: let
+  username = "dennissmith";
+  hostname = "utm-vm";
+in {
   imports = [
     ./hardware-configuration.nix
     inputs.home-manager.nixosModules.home-manager
@@ -79,6 +80,7 @@
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEyIXnW68HdNjjbUmcDGgBfXco6nI+MwzW5qp5393Umv dennisgsmith12@gmail.com"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNAgxIU4xd2QkO0ht5ljIqfYQn9IOMVW3C8HjN+iixE smith_dennis@bah.com"
       ];
       shell = pkgs.zsh;
       extraGroups = [
@@ -91,5 +93,4 @@
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.11";
-
 }
