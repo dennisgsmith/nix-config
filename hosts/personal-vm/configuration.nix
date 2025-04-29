@@ -80,7 +80,7 @@ in {
       initialPassword = "pass";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEyIXnW68HdNjjbUmcDGgBfXco6nI+MwzW5qp5393Umv dennisgsmith12@gmail.com"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEZCmGORbibeRZ322oOg+FNhUiBqqW4PEaYMRyLQ3yli dennisgsmith12@gmail.com"
       ];
       shell = pkgs.zsh;
       extraGroups = [
