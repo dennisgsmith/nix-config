@@ -5,7 +5,7 @@
   ...
 }: let
   username = "dennissmith";
-  hostname = "utm-vm";
+  hostname = "personal-vm-gnome";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -80,7 +80,6 @@ in {
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEyIXnW68HdNjjbUmcDGgBfXco6nI+MwzW5qp5393Umv dennisgsmith12@gmail.com"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNAgxIU4xd2QkO0ht5ljIqfYQn9IOMVW3C8HjN+iixE smith_dennis@bah.com"
       ];
       shell = pkgs.zsh;
       extraGroups = [

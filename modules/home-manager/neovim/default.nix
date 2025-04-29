@@ -1,6 +1,5 @@
 {
   inputs,
-  pkgs,
   lib,
   ...
 }: {
@@ -11,15 +10,6 @@
   home.shellAliases = {
     nv = "nvim";
   };
-
-  # programs.neovim = {
-  #   enable = true;
-  #   extraPackages = with pkgs; [
-  #     ripgrep
-  #   ];
-  # };
-
-  # xdg.configFile.nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.nix-config/dotfiles/nvim/";
 
   home.sessionVariables = {
     VISUAL = lib.mkForce "nvim";
@@ -60,7 +50,6 @@
 
       nix.enable = true;
       markdown.enable = true;
-
       bash.enable = true;
       clang.enable = true;
       css.enable = true;
@@ -74,13 +63,11 @@
       python.enable = true;
       rust.enable = true;
       rust.crates.enable = true;
-
       assembly.enable = false;
       elixir.enable = false;
       haskell.enable = false;
       ruby.enable = false;
       fsharp.enable = false;
-
       tailwind.enable = false;
       svelte.enable = false;
     };
@@ -91,11 +78,8 @@
       nvim-cursorline.enable = true;
       cinnamon-nvim.enable = true;
       fidget-nvim.enable = true;
-
       highlight-undo.enable = true;
       indent-blankline.enable = true;
-
-      # Fun
       cellular-automaton.enable = true;
     };
 
@@ -245,6 +229,9 @@
         vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
         vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+        -- clear highlighting until next search
+        vim.keymap.set('n', '<leader>l', '<Cmd>noh<CR>', { silent = true, noremap = true })
+
         local function minifile_open_cwd()
           local minifiles = require 'mini.files'
           minifiles.open(vim.api.nvim_buf_get_name(0))
@@ -269,8 +256,7 @@
         vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch open [B]uffers' })
         vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
         vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[K]eymaps' })
-        vim.keymap.set('n', '<leader>sa', '<cmd>Telescope git_status<cr>', { desc = '[S]earch [P]roject' })
-        vim.keymap.set('n', '<leader>sg', '<cmd>Telescope live_grep<cr>', { desc = '[S]earch by [G]rep' })
+        vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
         vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { desc = '[G]it [S]tatus' })
         vim.keymap.set('n', '<leader>gh', require('telescope.builtin').git_stash, { desc = '[G]it Stas[h]' })
         vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = '[G]it [B]ranches' })
