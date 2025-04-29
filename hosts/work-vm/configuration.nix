@@ -5,7 +5,7 @@
   ...
 }: let
   username = "dennissmith";
-  hostname = "work-vm-gnome";
+  hostname = "work-vm";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -50,7 +50,7 @@ in {
         user = username;
       };
     };
-    desktopManager.gnome.enable = true;
+    # desktopManager.gnome.enable = true;
   };
 
   systemd.services."getty@tty1".enable = false;

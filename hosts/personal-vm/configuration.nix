@@ -5,7 +5,7 @@
   ...
 }: let
   username = "dennissmith";
-  hostname = "personal-vm-gnome";
+  hostname = "personal-vm";
 in {
   imports = [
     ./hardware-configuration.nix
@@ -17,6 +17,7 @@ in {
       home-manager.extraSpecialArgs = {
         inherit inputs outputs username;
       };
+      home-manager.backupFileExtension = "hm.bak";
     }
     ../common/configuration.nix
     outputs.nixosModules.openssh
@@ -42,7 +43,7 @@ in {
   };
 
   services.xserver = {
-    enable = true;
+    enable = false;
     displayManager = {
       gdm.enable = true;
       autoLogin = {

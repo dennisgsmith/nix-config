@@ -4,13 +4,11 @@
   pkgs,
   lib,
   ...
-}:
-let
+}: let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-in
-{
+in {
   home.sessionVariables = {
-    NIX_PATH=lib.concatStringsSep ":" (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
+    NIX_PATH = lib.concatStringsSep ":" (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
   };
 
   programs.home-manager.enable = true;

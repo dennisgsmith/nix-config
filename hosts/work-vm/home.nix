@@ -1,13 +1,6 @@
-### https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
-{
-  inputs,
-  pkgs,
-  username,
-  ...
-}: {
+{username, ...}: {
   imports = [
     ../common/home.nix
-    ../common/gnome.nix
   ];
 
   home = {
@@ -18,6 +11,6 @@
   programs.git = {
     enable = true;
     userName = "Dennis Smith";
-    userEmail = "dennisgsmith12@gmail.com";
+    userEmail = "smith_dennis@bah.com";
   };
 }

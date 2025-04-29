@@ -34,6 +34,7 @@ in {
 
   environment.systemPackages = with pkgs; [
     nix-search-tv
+    home-manager
     wget
     git
   ];

@@ -5,4 +5,5 @@
   "cli-config" = import ./cli-config;
   wezterm = import ./wezterm;
   zsh = import ./zsh;
+  niri = import ./niri;
 }

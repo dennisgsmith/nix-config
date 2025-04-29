@@ -7,6 +7,7 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nvf.url = "github:notashelf/nvf";
+    niri.url = "github:sodiboo/niri-flake";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
@@ -20,11 +21,6 @@
     };
     homebrew-cask = {
       url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
-    # issue with fullscreen hdipi
-    unredirect-fixed = {
-      url = "github:aunetx/gnome-shell-extension-disable-unredirect/gnome-48";
       flake = false;
     };
   };
@@ -47,6 +43,7 @@
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
     forAllSystems = nixpkgs.lib.genAttrs systems;
+    username = "dennissmith";
   in {
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
@@ -66,13 +63,13 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      personal-vm-gnome = nixpkgs.lib.nixosSystem {
+      personal-vm = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/personal-vm-gnome/configuration.nix];
+        modules = [./hosts/personal-vm/configuration.nix];
       };
-      work-vm-gnome = nixpkgs.lib.nixosSystem {
+      work-vm = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/work-vm-gnome/configuration.nix];
+        modules = [./hosts/work-vm/configuration.nix];
       };
     };
 
@@ -89,20 +86,20 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "dennissmith@personal-mbp" = home-manager.lib.homeManagerConfiguration {
+      "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-        extraSpecialArgs = {inherit inputs outputs;};
+        extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/personal-mbp/home.nix];
       };
-      "dennissmith@personal-vm-gnome" = home-manager.lib.homeManagerConfiguration {
+      "${username}@personal-vm" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [./hosts/personal-vm-gnome/home.nix];
+        extraSpecialArgs = {inherit inputs outputs username;};
+        modules = [./hosts/personal-vm/home.nix];
       };
-      "dennissmith@work-vm-gnome" = home-manager.lib.homeManagerConfiguration {
+      "${username}@work-vm" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [./hosts/work-vm-gnome/home.nix];
+        extraSpecialArgs = {inherit inputs outputs username;};
+        modules = [./hosts/work-vm/home.nix];
       };
     };
   };

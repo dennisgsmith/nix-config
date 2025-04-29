@@ -1,8 +1,11 @@
-### https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
-{username, ...}: {
+{
+  outputs,
+  username,
+  ...
+}: {
   imports = [
     ../common/home.nix
-    ../common/gnome.nix
+    outputs.homeManagerModules.niri
   ];
 
   home = {
