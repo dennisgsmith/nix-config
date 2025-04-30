@@ -1,24 +1,29 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   home.shellAliases = {
     diff = "difft";
     ls = "lsd";
     search = "rg -p --glob '!node_modules/*'  $@";
   };
+
   home.packages = with pkgs; [
     difftastic
-    lsd
+    fzf
     htop
     hunspell
     iftop
-    iosevka
     jq
+    lsd
     ripgrep
     tree
-    vim
     unrar
     unzip
+    vim
   ];
+
   home.sessionVariables = {
     VISUAL = "vim";
     EDITOR = "vim";

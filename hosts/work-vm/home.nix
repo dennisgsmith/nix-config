@@ -1,6 +1,7 @@
 {username, ...}: {
   imports = [
     ../common/home.nix
+    outputs.homeManagerModules.niri
   ];
 
   home = {
