@@ -10,21 +10,29 @@
 
   nixpkgs.overlays = [inputs.niri.overlays];
 
+  home.packages = with pkgs; [
+    rofi-wayland
+    wezterm
+    chromium
+  ];
+
   programs.niri = {
     enable = true;
     settings = {
-      outputs."eDP-1".scale = 2.0;
+      outputs."eDP-1".scale = 0.5;
+      input.touchpad.natural-scroll = true;
+      input.mouse.natural-scroll = true;
       binds = with config.lib.niri.actions; let
         sh = spawn "sh" "-c";
       in {
         # First Key Row
-        "Super+Space".action = spawn "${pkgs.rofi-wayland}/bin/rofi" "-show" "drun";
-        "Super+W".action = spawn "${pkgs.wezterm}/bin/wezterm";
-        "Super+E".action = spawn "${pkgs.chromium}/bin/chromium";
-        "Super+R".action = close-window;
+        "Alt+Space".action = spawn "rofi" "-show" "drun";
+        "Alt+W".action = spawn "wezterm";
+        "Alt+E".action = spawn "chromium";
+        "Alt+R".action = close-window;
 
         # Quit Niri
-        "Super+Shift+Q".action = quit;
+        "Alt+Shift+Q".action = quit;
 
         # # Lock Session
         # "Super+L".action = spawn "${pkgs.systemd}/bin/loginctl" "lock-session";
@@ -33,16 +41,16 @@
         "Print".action = screenshot;
 
         # Workspackes
-        "Super+0".action = focus-workspace 0;
-        "Super+1".action = focus-workspace 1;
-        "Super+2".action = focus-workspace 2;
-        "Super+3".action = focus-workspace 3;
-        "Super+4".action = focus-workspace 4;
-        "Super+5".action = focus-workspace 5;
-        "Super+6".action = focus-workspace 6;
-        "Super+7".action = focus-workspace 7;
-        "Super+8".action = focus-workspace 8;
-        "Super+9".action = focus-workspace 9;
+        "Alt+0".action = focus-workspace 0;
+        "Alt+1".action = focus-workspace 1;
+        "Alt+2".action = focus-workspace 2;
+        "Alt+3".action = focus-workspace 3;
+        "Alt+4".action = focus-workspace 4;
+        "Alt+5".action = focus-workspace 5;
+        "Alt+6".action = focus-workspace 6;
+        "Alt+7".action = focus-workspace 7;
+        "Alt+8".action = focus-workspace 8;
+        "Alt+9".action = focus-workspace 9;
 
         # Special Keys
         "XF86AudioRaiseVolume".action = sh "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+";

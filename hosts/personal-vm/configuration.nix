@@ -9,6 +9,7 @@
 in {
   imports = [
     ./hardware-configuration.nix
+    # inputs.stylix.nixosModules.stylix
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;
@@ -23,8 +24,48 @@ in {
     outputs.nixosModules.openssh
   ];
 
+  # stylix = {
+  #   enable = true;
+  #   autoEnable = false;
+  #   # image = "";
+  #   polarity = "dark";
+  #   base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
+  # };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  boot.initrd.kernelModules = ["virtio_gpu" "virtio_pci" "virtio"];
+
+  hardware.graphics.enable = true;
+
+  environment = {
+    sessionVariables = {
+      XCURSOR_THEME = "Adwaita";
+      XDG_SESSION_TYPE = "wayland";
+      WLR_BACKENDS = "drm";
+      WLR_RENDERER_ALLOW_SOFTWARE = "1"; # fallback if no GPU
+    };
+    systemPackages = with pkgs; [
+      docker
+      docker-compose
+      docker-buildx
+      wayland-utils
+    ];
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+    extraOptions = "--experimental";
+  };
+
+  services.seatd.enable = true;
+  security.pam.services.niri = {};
+
+  services.udev.extraRules = ''
+    KERNEL=="card0", GROUP="video", MODE="0660"
+  '';
 
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
@@ -42,20 +83,7 @@ in {
     LC_TIME = "en_US.UTF-8";
   };
 
-  services.xserver = {
-    enable = false;
-    displayManager = {
-      gdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = username;
-      };
-    };
-    desktopManager.gnome.enable = true;
-  };
-
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
+  services.xserver.enable = false;
 
   services.spice-vdagentd.enable = true;
 
@@ -70,11 +98,6 @@ in {
 
   programs.zsh.enable = true;
 
-  environment.variables = {
-    XCURSOR_THEME = "Adwaita";
-  };
-
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
     ${username} = {
       initialPassword = "pass";
@@ -87,10 +110,12 @@ in {
         "wheel"
         "docker"
         "networkmanager"
+        "video"
+        "input"
+        "seat"
       ];
     };
   };
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.11";
 }

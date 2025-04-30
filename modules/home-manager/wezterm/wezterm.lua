@@ -29,7 +29,7 @@ local border_color = scheme_for_appearance(a, LIGHT_BORDER, DARK_BORDER)
 
 local c = {
         font = w.font_with_fallback({ "Iosevka", "termicons" }),
-        font_size = 18.0,
+        font_size = 20.0,
 
         keys = {
                 {
@@ -92,7 +92,7 @@ local c = {
         cursor_blink_rate = 600,
 
         -- Appearance
-        window_decorations = "TITLE | RESIZE | MACOS_FORCE_ENABLE_SHADOW",
+        window_decorations = "NONE",
         window_frame = {
                 active_titlebar_bg = border_color,
         },
