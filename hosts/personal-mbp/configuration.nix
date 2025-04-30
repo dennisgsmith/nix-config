@@ -3,9 +3,10 @@
   outputs,
   pkgs,
   ...
-}:
-  let username = "dennissmith"; hostname = "personal-mbp"; in
-{
+}: let
+  username = "dennissmith";
+  hostname = "personal-mbp";
+in {
   imports = [
     # home-manager
     inputs.home-manager.darwinModules.home-manager
@@ -99,19 +100,19 @@
   };
 
   system.defaults.dock.persistent-apps = [
-      { app = "/System/Applications/Calendar.app"; }
-      { app = "/System/Applications/App Store.app"; }
-      { app = "/System/Applications/Messages.app"; }
-      { app = "/System/Applications/Facetime.app"; }
-      { app = "/Applications/Vivaldi.app"; }
-      { app = "/Applications/Discord.app"; }
-      { app = "/Applications/Logic Pro.app"; }
-      { app = "/Applications/Spotify.app"; }
-      { app = "/Applications/Obsidian.app"; }
-      { app = "/Applications/UTM.app"; }
-      { app = "/Applications/WezTerm.app"; }
-      { app = "/System/Applications/Utilities/Activity Monitor.app"; }
-      { app = "/System/Applications/System Settings.app"; }
+    {app = "/System/Applications/Calendar.app";}
+    {app = "/System/Applications/App Store.app";}
+    {app = "/System/Applications/Messages.app";}
+    {app = "/System/Applications/Facetime.app";}
+    {app = "/Applications/Vivaldi.app";}
+    {app = "/Applications/Discord.app";}
+    {app = "/Applications/Logic Pro.app";}
+    {app = "/Applications/Spotify.app";}
+    {app = "/Applications/Obsidian.app";}
+    {app = "/Applications/UTM.app";}
+    {app = "/Applications/WezTerm.app";}
+    {app = "/System/Applications/Utilities/Activity Monitor.app";}
+    {app = "/System/Applications/System Settings.app";}
   ];
 
   # Set Git commit hash for darwin-version.

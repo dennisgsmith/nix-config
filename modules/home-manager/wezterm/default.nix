@@ -1,4 +1,5 @@
 {
+  pkgs,
   ...
 }:
 {
@@ -6,4 +7,8 @@
     enable = true;
     extraConfig = builtins.readFile ./wezterm.lua;
   };
+
+  home.packages = with pkgs; [
+    iosevka
+  ];
 }
