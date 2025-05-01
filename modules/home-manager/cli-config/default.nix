@@ -1,8 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-{
+{pkgs, ...}: {
   home.shellAliases = {
     diff = "difft";
     ls = "lsd";

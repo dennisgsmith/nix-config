@@ -1,9 +1,11 @@
 {
-  inputs,
+  pkgs,
   outputs,
   lib,
   ...
-}: {
+}: let
+  sysPackages = builtins.getAttr pkgs.system outputs.packages;
+in {
   home.shellAliases = {
     nv = "nvim";
   };
@@ -15,5 +17,5 @@
   };
 
   # use standalone neovim from custom package
-  home.packages = [outputs.packages.neovim];
+  home.packages = [sysPackages.neovim];
 }

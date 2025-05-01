@@ -2,8 +2,8 @@
 # You can build them using 'nix build .#example'
 {
   pkgs,
-  inputs
+  inputs,
 }: {
-  monome-druid = pkgs.callPackage ./monome-druid.nix { };
-  neovim = (pkgs.callPackage ./neovim.nix { inherit inputs; }).neovim;
+  monome-druid = pkgs.callPackage ./monome-druid.nix {};
+  neovim = (pkgs.callPackage ./neovim.nix {inherit inputs;}).neovim;
 }

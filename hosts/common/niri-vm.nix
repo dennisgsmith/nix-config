@@ -1,10 +1,6 @@
 # TODO: split up the wm and vm config
 # also, these should probably be in a different dir, like "profiles" or something
-{
-  pkgs,
-  ...
-}:
-{
+{pkgs, ...}: {
   boot.initrd.kernelModules = ["virtio_gpu" "virtio_pci" "virtio"];
   hardware.graphics.enable = true;
   environment = {

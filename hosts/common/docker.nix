@@ -1,8 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-{
+{pkgs, ...}: {
   # docker
   environment.systemPackages = with pkgs; [
     docker

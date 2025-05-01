@@ -55,6 +55,7 @@ in {
     username
     "@admin"
   ];
+
   nix.linux-builder = {
     enable = true;
     config.virtualisation = {
@@ -66,13 +67,13 @@ in {
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    docker
-    fswatch
-    lima
-    openssh
-    sshfs
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      fswatch
+      openssh
+      sshfs
+    ];
+  };
 
   homebrew = {
     enable = true;

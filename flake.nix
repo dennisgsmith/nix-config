@@ -48,10 +48,11 @@
   in {
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs {
+    packages = forAllSystems (system:
+      import ./pkgs {
         inherit inputs;
         pkgs = nixpkgs.legacyPackages.${system};
-    });
+      });
 
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'

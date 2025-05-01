@@ -100,6 +100,7 @@
       git = {
         enable = true;
         gitsigns.enable = true;
+        vim-fugitive.enable = true;
       };
 
       notes = {
@@ -118,6 +119,10 @@
 
       comments = {
         comment-nvim.enable = true;
+      };
+
+      utility = {
+        sleuth.enable = true;
       };
 
       mini = {
@@ -141,6 +146,45 @@
         };
         icons.enable = true;
       };
+
+      # lazy.plugins = with pkgs.vimPlugins; {
+      #   vim-abolish = {
+      #     package = vim-abolish;
+      #     setup = ''
+      #       require('vim-abolish').setup {}
+      #     '';
+      #   };
+      #   vim-rhubarb = {
+      #     package = vim-rhubarb;
+      #     setup = ''
+      #       require('vim-rhubarb').setup {}
+      #     '';
+      #     after = ["vim-fugitive"];
+      #   };
+      # };
+      #
+      # extraPlugins = with pkgs.vimPlugins; {
+      #   vim-dadbod = {
+      #     package = vim-dadbod;
+      #     setup = ''
+      #       require('vim-dadbod').setup {}
+      #     '';
+      #   };
+      #   vim-dadbod-ui = {
+      #     package = vim-dadbod-ui;
+      #     setup = ''
+      #       require('vim-dadbod-ui').setup {}
+      #     '';
+      #     after = ["dadbod"];
+      #   };
+      #   vim-dadbod-completion = {
+      #     package = vim-dadbod-completion;
+      #     setup = ''
+      #       require('vim-dadbod-completion').setup {}
+      #     '';
+      #     after = ["dadbod"];
+      #   };
+      # };
 
       luaConfigRC.config =
         /*
