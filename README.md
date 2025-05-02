@@ -23,13 +23,13 @@ docker run -d \
     nvim
 
 # then exec into the nvim daemon
-docker exec -it project_dev_container
+docker exec -it project_dev_daemon
 
-# which I alias to something like this, calling some macOS
+# alias an exec command, calling some macOS
 # system utils to get the current polarity and 
 # set the corresponding neovim theme
 alias work="docker exec -it project_dev_daemon /result/bin/nvim \
-    -c \"set background=\$(defaults read -g AppleInterfaceStyle &>/dev/null && echo dark || echo light)\" $HOME"
+    -c \"set background=\$(defaults read -g AppleInterfaceStyle &>/dev/null && echo dark || echo light)\""
 
 # optional, for ephemeral container in the current dir
 alias dnv="docker run -it -v \$(pwd):/work -w /work nvim \
