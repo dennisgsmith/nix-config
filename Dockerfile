@@ -5,6 +5,6 @@ RUN echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
 COPY . /tmp/build
 WORKDIR /tmp/build
 
-RUN nix --option filter-syscalls false build .#neovim
+RUN nix --option filter-syscalls false build -o /result .#neovim
 
-ENTRYPOINT ["/tmp/build/result/bin/nvim"]
+ENTRYPOINT ["/result/bin/nvim"]

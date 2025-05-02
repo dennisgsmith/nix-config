@@ -9,6 +9,7 @@
     config.vim = {
       viAlias = false;
       vimAlias = false;
+      useSystemClipboard = true;
       extraPackages = with pkgs; [
         go
       ];
@@ -79,7 +80,7 @@
         enable = true;
         name = "catppuccin";
         style = "mocha";
-        transparent = false;
+        transparent = true;
       };
 
       autocomplete = {
@@ -114,7 +115,15 @@
       };
 
       session = {
-        nvim-session-manager.enable = true;
+        nvim-session-manager = {
+          enable = true;
+          mappings = {
+            saveCurrentSession = "<leader>;c";
+            loadSession = "<leader>;l";
+            loadLastSession = "<leader>;lt";
+            deleteSession = "<leader>;d";
+          };
+        };
       };
 
       comments = {
@@ -138,9 +147,9 @@
             };
             windows = {
               preview = true;
-              width_focus = 35;
-              width_nofocus = 15;
-              width_preview = 100;
+              width_focus = 25;
+              width_nofocus = 10;
+              width_preview = 60;
             };
           };
         };
