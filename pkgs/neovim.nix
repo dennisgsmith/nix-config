@@ -220,9 +220,6 @@
           -- Enable mouse mode
           vim.o.mouse = 'a'
 
-          -- Sync clipboard between OS and Neovim.
-          vim.o.clipboard = 'unnamedplus'
-
           -- Enable break indent
           vim.o.breakindent = true
 
