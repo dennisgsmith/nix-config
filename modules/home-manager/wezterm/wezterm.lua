@@ -24,13 +24,6 @@ local function scheme_for_appearance(appearance, light_theme, dark_theme)
   end
 end
 
-local function get_window_decoration()
-  if string.find(w.target_triple, 'darwin') ~= nil then
-    return 'TITLE | RESIZE | MACOS_FORCE_ENABLE_SHADOW'
-  end
-  return 'NONE'
-end
-
 local a = get_appearance()
 local border_color = scheme_for_appearance(a, LIGHT_BORDER, DARK_BORDER)
 
@@ -99,7 +92,7 @@ local c = {
   cursor_blink_rate = 600,
 
   -- Appearance
-  window_decorations = get_window_decoration(),
+  window_decorations = 'NONE | RESIZE',
   window_frame = {
     active_titlebar_bg = border_color,
   },
@@ -108,8 +101,9 @@ local c = {
   enable_tab_bar = true,
   tab_bar_at_bottom = true,
 
-  macos_window_background_blur = 100, -- blur
-  hide_tab_bar_if_only_one_tab = false, -- [false] hide the tab bar when there is only a single tab in the window
+  window_background_opacity = 0.8,
+  macos_window_background_blur = 25,
+  hide_tab_bar_if_only_one_tab = false,
 }
 
 w.plugin.require('https://github.com/nekowinston/wezterm-bar').apply_to_config(c, {
