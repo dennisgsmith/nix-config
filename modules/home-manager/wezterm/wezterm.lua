@@ -101,6 +101,7 @@ local c = {
   enable_tab_bar = true,
   tab_bar_at_bottom = true,
 
+  adjust_window_size_when_changing_font_size = false,
   window_background_opacity = 0.8,
   macos_window_background_blur = 25,
   hide_tab_bar_if_only_one_tab = false,
@@ -126,14 +127,14 @@ w.plugin.require('https://github.com/nekowinston/wezterm-bar').apply_to_config(c
     },
   },
   tabs = {
-    numerals = 'arabic', -- or "roman"
+    numerals = 'arabic',        -- or "roman"
     pane_count = 'superscript', -- or "subscript", false
     brackets = {
       active = { '', ':' },
       inactive = { '', ':' },
     },
   },
-  clock = { -- note that this overrides the whole set_right_status
+  clock = {           -- note that this overrides the whole set_right_status
     enabled = true,
     format = '%H:%M', -- use https://wezfurlong.org/wezterm/config/lua/wezterm.time/Time/format.html
   },

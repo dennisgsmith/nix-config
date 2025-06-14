@@ -23,8 +23,6 @@ in {
   ];
 
   home.packages = with pkgs; [
-    aspell
-    aspellDicts.en
     bat
     btop
     coreutils
