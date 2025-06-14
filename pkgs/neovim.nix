@@ -15,7 +15,7 @@
       ];
 
       spellcheck = {
-        enable = true;
+        enable = false;
       };
 
       lsp = {
