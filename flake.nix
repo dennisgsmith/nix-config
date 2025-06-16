@@ -6,7 +6,6 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    nvf.url = "github:notashelf/nvf";
     niri.url = "github:sodiboo/niri-flake";
     stylix.url = "github:danth/stylix";
     home-manager.url = "github:nix-community/home-manager";

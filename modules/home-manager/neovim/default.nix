@@ -1,11 +1,10 @@
 {
   pkgs,
   outputs,
+  config,
   lib,
   ...
-}: let
-  sysPackages = builtins.getAttr pkgs.system outputs.packages;
-in {
+}: {
   home.shellAliases = {
     nv = "nvim";
   };
@@ -16,6 +15,14 @@ in {
     ALTERNATE_EDITOR = "vim";
   };
 
-  # use standalone neovim from custom package
-  home.packages = [sysPackages.neovim];
+  home.packages = with pkgs; [
+    neovim
+    # needed for some mason packages
+    cargo
+    go
+    nodejs_22
+    uv
+  ];
+
+  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/dotfiles/nvim";
 }

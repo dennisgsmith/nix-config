@@ -5,5 +5,4 @@
   inputs,
 }: {
   monome-druid = pkgs.callPackage ./monome-druid.nix {};
-  neovim = (pkgs.callPackage ./neovim.nix {inherit inputs;}).neovim;
 }
