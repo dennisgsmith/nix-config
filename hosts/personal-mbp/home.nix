@@ -18,7 +18,7 @@
       docker-credential-helpers
     ];
     sessionVariables = {
-      DOCKER_HOST = "unix:///Users/${username}/.colima/default/docker.sock";
+      DOCKER_HOST = "unix:///Users/${username}/.config/colima/default/docker.sock";
     };
   };
 
