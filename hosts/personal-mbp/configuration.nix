@@ -79,7 +79,7 @@ in {
     enable = true;
     casks = [
       "discord"
-      "firefox"
+      "firefox@nightly"
       "obsidian"
       "slack"
       "spotify"
@@ -106,7 +106,7 @@ in {
     {app = "/System/Applications/App Store.app";}
     {app = "/System/Applications/Messages.app";}
     {app = "/System/Applications/Facetime.app";}
-    {app = "/Applications/Firefox.app";}
+    {app = "/Applications/Firefox Nightly.app";}
     {app = "/Applications/Discord.app";}
     {app = "/Applications/Logic Pro.app";}
     {app = "/Applications/Spotify.app";}
