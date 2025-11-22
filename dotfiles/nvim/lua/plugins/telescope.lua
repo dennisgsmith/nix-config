@@ -53,7 +53,11 @@ local M = {
       defaults = {
         file_ignore_patterns = { 'node%_modules/.*', 'go/pkg/mod/*', '.DS_Store' },
         layout_stategy = 'vertical',
-        layout_config = { width = 0.95 },
+        layout_config = {
+          width = 0.95,
+          height = 0.95,
+          preview_width = 0.55,
+        },
         sorting_strategy = 'ascending',
         vimgrep_arguments = {
           'rg',

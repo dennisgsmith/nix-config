@@ -23,6 +23,7 @@ vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
+vim.o.undodir = vim.fn.expand '~/.local/share/nvim/undodir'
 
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.o.ignorecase = true

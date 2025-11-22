@@ -1,8 +1,6 @@
 return {
   {
     'mason-org/mason.nvim',
-    build = ':MasonUpdate',
-    config = true,
     opts = {
       ui = {
         border = 'rounded',
