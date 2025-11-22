@@ -20,6 +20,7 @@ return {
       vim.g.db_ui_use_postgres_views = 1
       vim.g.db_ui_use_nvim_notify = 1
       vim.g.db_ui_win_position = 'right'
+      vim.cmd 'set shiftwidth=2'
     end,
   },
 }

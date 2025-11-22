@@ -53,35 +53,3 @@ vim.api.nvim_create_autocmd('User', {
     end, { buffer = buf_id, noremap = true, silent = true })
   end,
 })
-
--- Define a function to set the Avante highlights
-local function set_avante_highlights()
-  -- Link groups to standard Diff highlight groups
-  vim.api.nvim_set_hl(0, 'AvanteReversedThirdTitle', { link = 'DiffText' })
-  vim.api.nvim_set_hl(0, 'AvanteThirdTitle', { link = 'DiffText' })
-  vim.api.nvim_set_hl(0, 'AvanteReversedSubtitle', { link = 'DiffChange' })
-  vim.api.nvim_set_hl(0, 'AvanteSubtitle', { link = 'DiffChange' })
-  vim.api.nvim_set_hl(0, 'AvanteReversedTitle', { link = 'DiffAdd' })
-  vim.api.nvim_set_hl(0, 'AvanteTitle', { link = 'DiffAdd' })
-  vim.api.nvim_set_hl(0, 'AvanteToBeDeletedWOStrikethrough', { link = 'DiffDelete' })
-  vim.api.nvim_set_hl(0, 'AvanteConflictIncoming', { link = 'DiffAdd' })
-  vim.api.nvim_set_hl(0, 'AvanteConflictCurrent', { link = 'DiffCurrent' })
-  vim.api.nvim_set_hl(0, 'AvanteConflictCurrentLabel', { link = 'DiffText' })
-  vim.api.nvim_set_hl(0, 'AvanteConflictIncomingLabel', { link = 'DiffText' })
-
-  -- For AvanteToBeDeleted, copy DiffDelete's fg and bg and add strikethrough
-  local diffdelete = vim.api.nvim_get_hl_by_name('DiffDelete', true)
-  vim.api.nvim_set_hl(0, 'AvanteToBeDeleted', {
-    fg = diffdelete.foreground,
-    bg = diffdelete.background,
-    strikethrough = true,
-  })
-end
-
--- Create an autocommand to reapply these settings when the colorscheme changes
-vim.api.nvim_create_autocmd('ColorScheme', {
-  pattern = '*',
-  callback = set_avante_highlights,
-})
-
-set_avante_highlights()

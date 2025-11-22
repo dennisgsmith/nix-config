@@ -1,4 +1,21 @@
+require 'sqlc'
 local utils = require 'utils'
+
+local function get_python_venv_settings()
+  local venv = vim.env.VIRTUAL_ENV
+  if not venv or venv == '' then
+    return nil
+  end
+
+  -- e.g. /Users/.../instrumentation-dcs-config/.venv
+  local venv_name = vim.fn.fnamemodify(venv, ':t') -- ".venv"
+  local venv_dir = vim.fn.fnamemodify(venv, ':h') -- "/Users/.../instrumentation-dcs-config"
+
+  return {
+    venvPath = venv_dir, -- directory that contains the venv
+    venv = venv_name, -- name of the venv directory
+  }
+end
 
 local client_capabilities = vim.lsp.protocol.make_client_capabilities()
 client_capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -48,10 +65,46 @@ local function on_attach(_, bufnr)
 end
 
 local function make_servers(capabilities)
+  local py_venv_settings = get_python_venv_settings()
+  local pyright = {
+    bin = 'pyright',
+    config = {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      filetypes = { 'python' },
+      root_dir = vim.fs.root(0, { 'pyproject.toml', 'requirements.txt', '.git' }),
+      settings = {
+        pyright = { disableOrganizeImports = true },
+        python = {
+          analysis = {
+            typeCheckingMode = 'standard',
+            reportMissingImports = 'error',
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+          },
+        },
+      },
+    },
+  }
+  if py_venv_settings then
+    pyright.config.settings.python.venvPath = py_venv_settings.venvPath
+    pyright.config.settings.python.venv = py_venv_settings.venv
+  end
   return {
     bashls = {
       bin = 'bash-language-server',
-      config = { on_attach = on_attach, capabilities = capabilities },
+      config = {
+        on_attach = function(client, bufnr)
+          local filename = vim.api.nvim_buf_get_name(bufnr)
+          if filename:match '%.env$' or vim.fn.fnamemodify(filename, ':t') == '.env' then
+            client.stop()
+            return
+          end
+          on_attach(client, bufnr)
+        end,
+        capabilities = capabilities,
+        filetypes = { 'bash', 'sh' },
+      },
     },
     clangd = {
       bin = 'clangd',
@@ -79,7 +132,12 @@ local function make_servers(capabilities)
     },
     eslint = {
       bin = 'eslint-lsp',
-      config = { on_attach = on_attach, capabilities = capabilities },
+      config = {
+        on_attach = on_attach,
+        root_dir = vim.fs.root(0, { 'eslint.config.ts', 'eslint.config.js', '.eslintrc', 'package.json', '.git' }),
+        capabilities = capabilities,
+        filetypes = { 'js', 'mjs', 'cjs' },
+      },
     },
     gopls = {
       bin = 'gopls',
@@ -118,6 +176,14 @@ local function make_servers(capabilities)
         },
         on_attach = on_attach,
         capabilities = capabilities,
+        settings = {
+          json = {
+            schemas = require('schemastore').json.schemas {
+              select = { 'openapi.json' },
+            },
+            validate = { enable = true },
+          },
+        },
       },
     },
     lua_ls = {
@@ -135,12 +201,37 @@ local function make_servers(capabilities)
         },
       },
     },
-    nil_ls = {
-      bin = 'nil',
-      config = { on_attach = on_attach, capabilities = capabilities },
-    },
-    pyright = {
-      bin = 'pyright',
+    -- nil_ls = {
+    --   bin = 'nil',
+    --   config = { on_attach = on_attach, capabilities = capabilities },
+    -- },
+    -- postgres_lsp = {
+    --   bin = 'postgrestools',
+    --   config = {
+    --     on_attach = on_attach,
+    --     capabilities = capabilities,
+    --     cmd = {
+    --       'postgrestools',
+    --       'lsp-proxy',
+    --     },
+    --     filetypes = {
+    --       'sql',
+    --     },
+    --     root_markers = {
+    --       'postgrestools.jsonc',
+    --     },
+    --     on_init = function(client, _)
+    --       local filename = vim.api.nvim_buf_get_name(0)
+    --       if not filename:match '%.sql$' then
+    --         client.stop()
+    --       end
+    --     end,
+    --   },
+    -- },
+    pyright = pyright,
+    ruff = {
+      bin = 'ruff',
+      filetypes = { 'python' },
       config = { on_attach = on_attach, capabilities = capabilities },
     },
     rust_analyzer = {
@@ -154,21 +245,65 @@ local function make_servers(capabilities)
     ts_ls = {
       bin = 'typescript-language-server',
       config = {
-        root_dir = vim.fs.root(0, { '.git' }),
+        root_dir = vim.fs.root(0, { 'tsconfig.json', 'package.json', '.git' }),
         on_attach = on_attach,
         capabilities = capabilities,
       },
     },
     yamlls = {
       bin = 'yaml-language-server',
-      config = { on_attach = on_attach, capabilities = capabilities },
+      config = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+          yaml = {
+            schemaStore = {
+              enable = true,
+              url = 'https://www.schemastore.org/api/json/catalog.json',
+            },
+            schemas = require('schemastore').json.schemas {
+              select = { 'openapi.json' },
+            },
+          },
+          -- replace = {
+          --   ['openapi.yaml'] = {
+          --     description = "OpenAPI 3.1",
+          --     fileMatch = { "openapi.yaml", "openapi.yml" },
+          --     name = "openapi.yaml",
+          --     url = "https://example.com/schema/openapi.json"
+          --   },
+          -- },
+        },
+        on_init = function(client, _)
+          local bufnr = vim.api.nvim_get_current_buf()
+          local lines = vim.api.nvim_buf_get_lines(bufnr, 0, math.min(20, vim.api.nvim_buf_line_count(bufnr)), false)
+          local openapi_version
+          for _, line in ipairs(lines) do
+            local v = line:match '^openapi:%s*([%d%.]+)'
+            if v then
+              openapi_version = v
+              break
+            end
+          end
+          if openapi_version then
+            local major = openapi_version:match '^(%d+)'
+            local schema_url
+            if major == '3' then
+              if openapi_version:find '^3%.0' then
+                schema_url = 'https://spec.openapis.org/oas/3.0/schema/2021-09-28'
+              elseif openapi_version:find '^3%.1' then
+                schema_url = 'https://spec.openapis.org/oas/3.1/schema/2022-10-07'
+              end
+            end
+            if schema_url then
+              client.config.settings.yaml.schemas[schema_url] = { 'openapi.yaml', 'openapi.yml', 'openapi.json' }
+              client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
+            end
+          end
+        end,
+      },
     },
   }
-end
-
-for name, def in pairs(make_servers(get_capabilities())) do
-  local cfg = type(def.config) == 'function' and def.config() or def.config
-  vim.lsp.config(name, cfg)
 end
 
 vim.diagnostic.config {
@@ -199,12 +334,6 @@ for _, _ in pairs(signs) do
   }
 end
 
-local lsp_servers = {}
-
-for name, _ in pairs(make_servers(function() end, get_capabilities())) do
-  table.insert(lsp_servers, name)
-end
-
 return {
   {
     'mason-org/mason-lspconfig.nvim',
@@ -213,8 +342,20 @@ return {
       'mason.nvim',
       'hrsh7th/cmp-nvim-lsp',
       'stevearc/conform.nvim',
+      'b0o/schemastore.nvim',
     },
     config = function()
+      local lsp_servers = {}
+
+      for name, def in pairs(make_servers(get_capabilities())) do
+        local cfg = type(def.config) == 'function' and def.config() or def.config
+        vim.lsp.config[name] = cfg
+      end
+
+      for name, _ in pairs(make_servers(function() end, get_capabilities())) do
+        table.insert(lsp_servers, name)
+      end
+
       require('mason-lspconfig').setup {
         ensure_installed = lsp_servers,
       }

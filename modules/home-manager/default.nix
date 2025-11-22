@@ -5,5 +5,6 @@
   neovim = import ./neovim;
   niri = import ./niri;
   wezterm = import ./wezterm;
+  ghostty = import ./ghostty;
   zsh = import ./zsh;
 }

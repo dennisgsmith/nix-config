@@ -20,7 +20,7 @@ require('lazy').setup {
   spec = {
     { import = 'plugins' },
   },
-  install = { colorscheme = { 'catppuccin' } },
+  install = { colorscheme = { 'terafox' } },
   checker = { enabled = true, notify = false },
   ui = {
     border = 'rounded',

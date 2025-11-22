@@ -15,7 +15,7 @@ in {
     cli-config
     direnv
     neovim
-    wezterm
+    ghostty
     zsh
   ];
 

@@ -1,0 +1,28 @@
+shell-integration = zsh
+
+font-family = Iosevka
+font-size = 16
+
+theme = light:Dayfox,dark:Terafox
+background-opacity = 0.97
+background-blur = true
+
+mouse-hide-while-typing = true
+scrollback-limit = 1000000
+
+window-width = 176
+window-height = 44
+window-save-state = always
+
+keybind = super+shift+n=new_window
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:bottom
+keybind = super+k=goto_split:top
+keybind = super+l=goto_split:right
+keybind = super+shift+h=resize_split:left,50
+keybind = super+shift+j=resize_split:down,50
+keybind = super+shift+k=resize_split:up,50
+keybind = super+shift+l=resize_split:right,50
+keybind = super+`=toggle_split_zoom
+
+macos-titlebar-proxy-icon = "hidden"
