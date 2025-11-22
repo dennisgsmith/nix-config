@@ -91,7 +91,6 @@ in {
       "slack"
       "spotify"
       "utm"
-      "ghostty"
     ];
 
     # These app IDs are from using the mas CLI app
@@ -118,7 +117,7 @@ in {
     {app = "/Applications/Spotify.app";}
     {app = "/Applications/Obsidian.app";}
     {app = "/Applications/UTM.app";}
-    {app = "/Applications/Ghostty.app";}
+    {app = "${pkgs.ghostty-bin}/Applications/Ghostty.app";}
     {app = "/System/Applications/Utilities/Activity Monitor.app";}
     {app = "/System/Applications/System Settings.app";}
   ];
