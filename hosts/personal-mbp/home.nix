@@ -11,7 +11,6 @@
     inherit username;
     homeDirectory = "/Users/${username}";
     packages = with pkgs; [
-      colima
       docker
       docker-compose
       docker-buildx

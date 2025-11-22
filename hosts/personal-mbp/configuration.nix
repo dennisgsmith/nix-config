@@ -27,10 +27,15 @@ in {
         enableRosetta = true;
         user = username;
         taps = {
+          "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
           "homebrew/homebrew-core" = inputs.homebrew-core;
           "homebrew/homebrew-cask" = inputs.homebrew-cask;
         };
         mutableTaps = false;
+        package = inputs.nix-homebrew.inputs.brew-src // {
+          name = "brew-4.6.11";
+          version = "4.6.11";
+        };
       };
     }
     ../common/configuration.nix
@@ -77,6 +82,9 @@ in {
 
   homebrew = {
     enable = true;
+    brews = [
+      "colima"
+    ];
     casks = [
       "discord"
       "obsidian"
@@ -98,6 +106,7 @@ in {
     };
   };
 
+  system.primaryUser = "dennissmith";
   system.defaults.dock.persistent-apps = [
     {app = "/System/Applications/Calendar.app";}
     {app = "/System/Applications/App Store.app";}
