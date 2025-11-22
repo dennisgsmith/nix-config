@@ -12,7 +12,7 @@
 
   home.packages = with pkgs; [
     rofi-wayland
-    wezterm
+    ghostty
     chromium
   ];
 
@@ -27,7 +27,7 @@
       in {
         # First Key Row
         "Alt+Space".action = spawn "rofi" "-show" "drun";
-        "Alt+W".action = spawn "wezterm";
+        "Alt+M".action = spawn "ghostty";
         "Alt+E".action = spawn "chromium";
         "Alt+R".action = close-window;
 

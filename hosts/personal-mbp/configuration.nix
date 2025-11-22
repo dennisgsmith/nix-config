@@ -79,14 +79,11 @@ in {
     enable = true;
     casks = [
       "discord"
-      "firefox@nightly"
       "obsidian"
       "slack"
       "spotify"
       "utm"
-      "visual-studio-code"
-      "vivaldi"
-      "wezterm"
+      "ghostty"
     ];
 
     # These app IDs are from using the mas CLI app
@@ -106,13 +103,13 @@ in {
     {app = "/System/Applications/App Store.app";}
     {app = "/System/Applications/Messages.app";}
     {app = "/System/Applications/Facetime.app";}
-    {app = "/Applications/Firefox Nightly.app";}
+    {app = "/Applications/Safari.app";}
     {app = "/Applications/Discord.app";}
     {app = "/Applications/Logic Pro.app";}
     {app = "/Applications/Spotify.app";}
     {app = "/Applications/Obsidian.app";}
     {app = "/Applications/UTM.app";}
-    {app = "/Applications/WezTerm.app";}
+    {app = "/Applications/Ghostty.app";}
     {app = "/System/Applications/Utilities/Activity Monitor.app";}
     {app = "/System/Applications/System Settings.app";}
   ];
