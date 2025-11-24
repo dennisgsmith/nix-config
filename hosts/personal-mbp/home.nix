@@ -23,7 +23,9 @@
 
   programs.git = {
     enable = true;
-    userName = "Dennis Smith";
-    userEmail = "dennisgsmith12@gmail.com";
+    settings.user = {
+      name = "Dennis Smith";
+      email = "dennisgsmith12@gmail.com";
+    };
   };
 }

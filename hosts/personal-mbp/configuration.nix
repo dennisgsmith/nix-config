@@ -55,6 +55,8 @@ in {
 
   security.pam.services.sudo_local.touchIdAuth = true;
 
+  ids.gids.nixbld = 350;
+
   # remote linux builder vm for docker
   nix.settings.extra-trusted-users = [
     username
@@ -116,7 +118,6 @@ in {
     {app = "/Applications/Logic Pro.app";}
     {app = "/Applications/Spotify.app";}
     {app = "/Applications/Obsidian.app";}
-    {app = "/Applications/UTM.app";}
     {app = "${pkgs.ghostty-bin}/Applications/Ghostty.app";}
     {app = "/System/Applications/Utilities/Activity Monitor.app";}
     {app = "/System/Applications/System Settings.app";}

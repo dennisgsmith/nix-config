@@ -7,13 +7,12 @@ local function get_python_venv_settings()
     return nil
   end
 
-  -- e.g. /Users/.../instrumentation-dcs-config/.venv
-  local venv_name = vim.fn.fnamemodify(venv, ':t') -- ".venv"
-  local venv_dir = vim.fn.fnamemodify(venv, ':h') -- "/Users/.../instrumentation-dcs-config"
+  local venv_name = vim.fn.fnamemodify(venv, ':t')
+  local venv_dir = vim.fn.fnamemodify(venv, ':h')
 
   return {
     venvPath = venv_dir, -- directory that contains the venv
-    venv = venv_name, -- name of the venv directory
+    venv = venv_name,    -- name of the venv directory
   }
 end
 

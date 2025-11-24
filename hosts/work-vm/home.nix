@@ -1,4 +1,4 @@
-{username, ...}: {
+{username, outputs, ...}: {
   imports = [
     ../common/home.nix
     outputs.homeManagerModules.niri
@@ -11,7 +11,9 @@
 
   programs.git = {
     enable = true;
-    userName = "Dennis Smith";
-    userEmail = "smith_dennis@bah.com";
+    settings.user = {
+      name = "Dennis Smith";
+      email = "smith_dennis@bah.com";
+    };
   };
 }

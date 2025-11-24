@@ -21,7 +21,7 @@
       }
     ];
     envExtra = ''
-      ${lib.optionalString (lib.strings.hasSuffix "darwin" pkgs.system) "export PATH=/opt/homebrew/bin:$PATH"}
+      ${lib.optionalString (lib.strings.hasSuffix "darwin" pkgs.stdenv.hostPlatform.system) "export PATH=/opt/homebrew/bin:$PATH"}
       autoload edit-command-line
       zle -N edit-command-line
       bindkey "^X^E" edit-command-line

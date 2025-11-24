@@ -61,7 +61,7 @@ inputs = {
     packages = forAllSystems (system:
       import ./pkgs {
         inherit inputs;
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs { hostPlatform = system; };
       });
 
     # Formatter for your nix files, available through 'nix fmt'
@@ -102,17 +102,17 @@ inputs = {
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
       "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        pkgs = import nixpkgs { hostPlatform = "aarch64-darwin"; };
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/personal-mbp/home.nix];
       };
       "${username}@personal-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/personal-vm/home.nix];
       };
       "${username}@work-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/work-vm/home.nix];
       };
