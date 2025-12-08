@@ -1,30 +1,40 @@
 {
   description = "nixos / nix-darwin / home manager configurations";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-    niri.url = "github:sodiboo/niri-flake";
-    stylix.url = "github:danth/stylix";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nur.url = "github:nix-community/NUR";
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
-    homebrew-bundle = {
-      url = "github:homebrew/homebrew-bundle";
-      flake = false;
-    };
-    homebrew-core = {
-      url = "github:homebrew/homebrew-core";
-      flake = false;
-    };
-    homebrew-cask = {
-      url = "github:homebrew/homebrew-cask";
-      flake = false;
-    };
+inputs = {
+  nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+
+  nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+  nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+  niri.url = "github:sodiboo/niri-flake";
+  stylix.url = "github:danth/stylix";
+
+  home-manager.url = "github:nix-community/home-manager";
+  home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+  nur.url = "github:nix-community/NUR";
+
+  # nix-homebrew with brew pinned to 4.6.11
+  nix-homebrew = {
+    url = "github:zhaofengli-wip/nix-homebrew";
+    inputs.brew-src.url = "github:Homebrew/brew/4.6.11";
   };
+
+  homebrew-bundle = {
+    url = "github:homebrew/homebrew-bundle";
+    flake = false;
+  };
+  homebrew-core = {
+    url = "github:homebrew/homebrew-core";
+    flake = false;
+  };
+  homebrew-cask = {
+    url = "github:homebrew/homebrew-cask";
+    flake = false;
+  };
+};
 
   outputs = {
     self,
@@ -51,7 +61,7 @@
     packages = forAllSystems (system:
       import ./pkgs {
         inherit inputs;
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs { hostPlatform = system; };
       });
 
     # Formatter for your nix files, available through 'nix fmt'
@@ -92,17 +102,17 @@
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
       "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        pkgs = import nixpkgs { hostPlatform = "aarch64-darwin"; };
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/personal-mbp/home.nix];
       };
       "${username}@personal-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/personal-vm/home.nix];
       };
       "${username}@work-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/work-vm/home.nix];
       };

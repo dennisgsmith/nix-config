@@ -11,7 +11,6 @@
     inherit username;
     homeDirectory = "/Users/${username}";
     packages = with pkgs; [
-      colima
       docker
       docker-compose
       docker-buildx
@@ -24,7 +23,9 @@
 
   programs.git = {
     enable = true;
-    userName = "Dennis Smith";
-    userEmail = "dennisgsmith12@gmail.com";
+    settings.user = {
+      name = "Dennis Smith";
+      email = "dennisgsmith12@gmail.com";
+    };
   };
 }

@@ -27,10 +27,15 @@ in {
         enableRosetta = true;
         user = username;
         taps = {
+          "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
           "homebrew/homebrew-core" = inputs.homebrew-core;
           "homebrew/homebrew-cask" = inputs.homebrew-cask;
         };
         mutableTaps = false;
+        package = inputs.nix-homebrew.inputs.brew-src // {
+          name = "brew-4.6.11";
+          version = "4.6.11";
+        };
       };
     }
     ../common/configuration.nix
@@ -49,6 +54,8 @@ in {
   networking.hostName = hostname;
 
   security.pam.services.sudo_local.touchIdAuth = true;
+
+  ids.gids.nixbld = 350;
 
   # remote linux builder vm for docker
   nix.settings.extra-trusted-users = [
@@ -77,13 +84,15 @@ in {
 
   homebrew = {
     enable = true;
+    brews = [
+      "colima"
+    ];
     casks = [
       "discord"
       "obsidian"
       "slack"
       "spotify"
       "utm"
-      "ghostty"
     ];
 
     # These app IDs are from using the mas CLI app
@@ -98,6 +107,7 @@ in {
     };
   };
 
+  system.primaryUser = "dennissmith";
   system.defaults.dock.persistent-apps = [
     {app = "/System/Applications/Calendar.app";}
     {app = "/System/Applications/App Store.app";}
@@ -108,8 +118,7 @@ in {
     {app = "/Applications/Logic Pro.app";}
     {app = "/Applications/Spotify.app";}
     {app = "/Applications/Obsidian.app";}
-    {app = "/Applications/UTM.app";}
-    {app = "/Applications/Ghostty.app";}
+    {app = "${pkgs.ghostty-bin}/Applications/Ghostty.app";}
     {app = "/System/Applications/Utilities/Activity Monitor.app";}
     {app = "/System/Applications/System Settings.app";}
   ];
