@@ -6,14 +6,9 @@ local function get_python_venv_settings()
   if not venv or venv == '' then
     return nil
   end
-
-  -- e.g. /Users/.../instrumentation-dcs-config/.venv
-  local venv_name = vim.fn.fnamemodify(venv, ':t') -- ".venv"
-  local venv_dir = vim.fn.fnamemodify(venv, ':h') -- "/Users/.../instrumentation-dcs-config"
-
   return {
-    venvPath = venv_dir, -- directory that contains the venv
-    venv = venv_name, -- name of the venv directory
+    venvPath = vim.fn.fnamemodify(venv, ':h'),
+    venv = vim.fn.fnamemodify(venv, ':t'),
   }
 end
 
@@ -160,10 +155,6 @@ local function make_servers(capabilities)
       bin = 'html-lsp',
       config = { on_attach = on_attach, capabilities = capabilities },
     },
-    java_language_server = {
-      bin = 'java-language-server',
-      config = { on_attach = on_attach, capabilities = capabilities },
-    },
     jsonls = {
       bin = 'json-lsp',
       config = {
@@ -228,12 +219,12 @@ local function make_servers(capabilities)
     --     end,
     --   },
     -- },
-    pyright = pyright,
     ruff = {
       bin = 'ruff',
       filetypes = { 'python' },
       config = { on_attach = on_attach, capabilities = capabilities },
     },
+    pyright = pyright,
     rust_analyzer = {
       bin = 'rust-analyzer',
       config = { on_attach = on_attach, capabilities = capabilities },

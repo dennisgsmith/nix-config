@@ -1,10 +1,10 @@
 return {
   {
     'olimorris/codecompanion.nvim',
+    version = '17.33.0',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
-      'ravitemer/mcphub.nvim',
       'echasnovski/mini.diff',
       'HakonHarnes/img-clip.nvim',
       'ravitemer/codecompanion-history.nvim',
