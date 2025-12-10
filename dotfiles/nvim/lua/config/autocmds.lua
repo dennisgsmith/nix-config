@@ -53,3 +53,21 @@ vim.api.nvim_create_autocmd('User', {
     end, { buffer = buf_id, noremap = true, silent = true })
   end,
 })
+
+vim.api.nvim_create_user_command("CopyPath", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  print(path .. " yanked")
+end, {})
+
+vim.api.nvim_create_user_command("CopyRelPath", function()
+  local relpath = vim.fn.expand("%")
+  vim.fn.setreg("+", relpath)
+  print(relpath .. " yanked")
+end, {})
+
+vim.api.nvim_create_user_command("CopyFileName", function()
+  local filename = vim.fn.expand("%:t")
+  vim.fn.setreg("+", filename)
+  print(filename .. " yanked")
+end, {})

@@ -14,14 +14,30 @@
     ALTERNATE_EDITOR = "vim";
   };
 
-  home.packages = with pkgs; [
-    neovim
-    # needed for some mason packages
-    cargo
-    go
-    nodejs_22
-    uv
-  ];
+  programs.neovim = {
+    enable = true;
+    extraPackages = with pkgs; [
+      imagemagick
+      ghostscript
+      # need latex for snacks.image
+      texlive.combined.scheme-basic
+      tree-sitter
+      tectonic
+      mermaid-cli
+    ];
+  };
 
-  xdg.configFile."nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/dotfiles/nvim";
+  home.packages =
+    (with pkgs; [
+      # needed for some mason packages
+      cargo
+      go
+      nodejs_22
+      uv
+    ])
+    ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.pngpaste ];
+
+  xdg.configFile."nvim".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/nix-config/dotfiles/nvim";
 }

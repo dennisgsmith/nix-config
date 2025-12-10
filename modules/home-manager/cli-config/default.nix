@@ -1,7 +1,11 @@
 {pkgs, ...}: {
+  programs.lsd = {
+    enable = true;
+    settings.color.when = "never";
+  };
+
   home.shellAliases = {
     diff = "difft";
-    ls = "lsd";
     search = "rg -p --glob '!node_modules/*'  $@";
   };
 
@@ -13,7 +17,6 @@
     hunspell
     iftop
     jq
-    lsd
     ripgrep
     tree
     unrar
@@ -28,5 +31,6 @@
     HISTSIZE = 10000;
     HISTFILESIZE = 100000;
     PATH = "$HOME/.local/share/bin:$PATH";
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=#888888";
   };
 }
