@@ -1,14 +1,14 @@
 return {
-  "obsidian-nvim/obsidian.nvim",
+  'obsidian-nvim/obsidian.nvim',
   dependencies = {
-    "hrsh7th/nvim-cmp",
-    "nvim-telescope/telescope.nvim",
-    "folke/snacks.nvim",
-    "nvim-treesitter/nvim-treesitter",
-    "MeanderingProgrammer/render-markdown.nvim",
+    'saghen/blink.cmp',
+    'nvim-telescope/telescope.nvim',
+    'folke/snacks.nvim',
+    'nvim-treesitter/nvim-treesitter',
+    'MeanderingProgrammer/render-markdown.nvim',
   },
   version = false,
-  ft = "markdown",
+  ft = 'markdown',
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
   -- event = {
   --   -- If you want to use the home shortcut "~" here you need to call "vim.fn.expand".
@@ -23,13 +23,12 @@ return {
     legacy_commands = false, -- this will be removed in the next major release
     workspaces = {
       {
-        name = "personal",
-        path = vim.fn.expand("~")
-            .. "/Library/Mobile Documents/iCloud~md~obsidian/Documents/Personal Vault",
+        name = 'vault',
+        path = vim.fn.expand '~' .. '/vault',
       },
     },
     attachments = {
-      img_folder = "/assets",
+      img_folder = '/assets',
     },
   },
 }

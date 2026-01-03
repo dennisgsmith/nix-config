@@ -13,10 +13,19 @@ local function get_python_venv_settings()
 end
 
 local client_capabilities = vim.lsp.protocol.make_client_capabilities()
-client_capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- client_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local function get_capabilities()
-  return require('cmp_nvim_lsp').default_capabilities(client_capabilities)
+  local capabilities = vim.tbl_deep_extend('force', client_capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
+  capabilities = vim.tbl_deep_extend('force', capabilities, {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+    },
+  })
+  return capabilities
 end
 
 local function on_attach(_, bufnr)
@@ -146,6 +155,11 @@ local function make_servers(capabilities)
           gopls = {
             completeUnimported = true,
             usePlaceholders = true,
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = false,
           },
           analyses = { unusedparams = true },
         },
@@ -294,6 +308,31 @@ local function make_servers(capabilities)
         end,
       },
     },
+    zls = {
+      on_init = function(_client, _)
+        vim.g.zig_fmt_parse_errors = 0
+        vim.g.zig_fmt_autosave = 0
+        vim.api.nvim_create_autocmd('BufWritePre', {
+          pattern = { '*.zig', '*.zon' },
+          callback = function(_ev)
+            vim.lsp.buf.format()
+          end,
+        })
+      end,
+      config = {
+        cmd = { '/path/to/zls_executable' },
+        -- https://zigtools.org/zls/configure/
+        settings = {
+          zls = {
+            -- https://zigtools.org/zls/guides/build-on-save/
+            -- enable_build_on_save = true,
+            semantic_tokens = 'partial',
+          },
+          on_attach = on_attach,
+          capabilities = capabilities,
+        },
+      },
+    },
   }
 end
 
@@ -331,7 +370,7 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       'mason.nvim',
-      'hrsh7th/cmp-nvim-lsp',
+      'saghen/blink.cmp',
       'stevearc/conform.nvim',
       'b0o/schemastore.nvim',
     },

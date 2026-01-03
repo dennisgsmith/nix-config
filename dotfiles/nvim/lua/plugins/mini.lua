@@ -2,6 +2,11 @@ return {
   {
     'echasnovski/mini.icons',
     version = '*',
+    opts = {
+      lsp = {
+        copilot = { glyph = ' ', hl = 'MiniIconsOrange' },
+      },
+    },
     config = function(_, opts)
       local MiniIcons = require 'mini.icons'
       MiniIcons.setup(opts)
