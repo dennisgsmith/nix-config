@@ -1,4 +1,3 @@
--- keeps track of buffers that have been "touched" (entered insert mode or modified the buffer)
 local id = vim.api.nvim_create_augroup('startup', { clear = false })
 
 local persistbuffer = function(bufnr)
@@ -20,12 +19,10 @@ vim.api.nvim_create_autocmd({ 'BufRead' }, {
   end,
 })
 
---- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
   group = highlight_group,
   pattern = '*',
@@ -71,27 +68,3 @@ vim.api.nvim_create_user_command('CopyFileName', function()
   vim.fn.setreg('+', filename)
   print(filename .. ' yanked')
 end, {})
-
--- https://go.dev/gopls/editor/vim#neovim-imports
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  pattern = '*.go',
-  callback = function()
-    local params = vim.lsp.util.make_range_params()
-    params.context = { only = { 'source.organizeImports' } }
-    -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-    -- machine and codebase, you may want longer. Add an additional
-    -- argument after params if you find that you have to write the file
-    -- twice for changes to be saved.
-    -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-    local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
-    for cid, res in pairs(result or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or 'utf-16'
-          vim.lsp.util.apply_workspace_edit(r.edit, enc)
-        end
-      end
-    end
-    vim.lsp.buf.format { async = false }
-  end,
-})

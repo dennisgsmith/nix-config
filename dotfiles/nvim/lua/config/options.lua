@@ -45,6 +45,3 @@ vim.o.termguicolors = true
 -- Window split direction
 vim.cmd.set 'splitbelow'
 vim.cmd.set 'splitright'
-
--- Turn off inline diagnostic text
-vim.diagnostic.config { virtual_text = false, float = { border = 'rounded' } }

@@ -1,3 +1,5 @@
+auto-update-channel = stable
+
 shell-integration = zsh
 
 font-family = Iosevka
@@ -8,7 +10,7 @@ background-opacity = 0.97
 background-blur = true
 
 mouse-hide-while-typing = true
-scrollback-limit = 1000000
+scrollback-limit = 1024000000
 
 window-width = 176
 window-height = 44
