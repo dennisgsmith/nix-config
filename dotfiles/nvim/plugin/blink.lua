@@ -1,30 +1,51 @@
-vim.api.nvim_create_autocmd('PackChanged', {
-  callback = function(ev)
-    if ev.data.spec.name ~= 'blink.cmp' then
-      return
-    end
+local function path_exists(path)
+  return path and path ~= '' and vim.uv.fs_stat(path) ~= nil
+end
 
-    if ev.data.kind ~= 'install' and ev.data.kind ~= 'update' then
-      return
-    end
+local function has_nix()
+  return vim.fn.executable 'nix' == 1
+end
 
-    vim.system({ 'cargo', 'build', '--release' }, { cwd = ev.data.path }, function(res)
-      if res.code ~= 0 then
-        vim.schedule(function()
-          vim.notify('blink.cmp build failed:\n' .. ((res.stderr and res.stderr ~= '') and res.stderr or (res.stdout or '')), vim.log.levels.ERROR)
-        end)
-      end
-    end)
-  end,
-})
+local function load_runtime_plugin(path)
+  if not path_exists(path) then
+    return false
+  end
 
-vim.pack.add {
-  { src = 'https://github.com/saghen/blink.cmp' },
+  vim.opt.runtimepath:append(path)
+
+  local after_path = vim.fs.joinpath(path, 'after')
+  if path_exists(after_path) then
+    vim.opt.runtimepath:append(after_path)
+  end
+
+  return true
+end
+
+local function blink_cmp_pack_spec()
+  return {
+    name = 'blink.cmp',
+    src = 'https://github.com/saghen/blink.cmp',
+    version = vim.version.range '1.0',
+  }
+end
+
+local blink_cmp_nix_path = vim.env.BLINK_CMP_NIX_PATH
+local use_nix_blink = has_nix() and path_exists(blink_cmp_nix_path)
+
+local pack_specs = {
   { src = 'https://github.com/rafamadriz/friendly-snippets' },
   { src = 'https://github.com/saghen/blink.compat', version = vim.version.range '1.0' },
   { src = 'https://github.com/kristijanhusak/vim-dadbod-completion' },
   { src = 'https://github.com/fang2hou/blink-copilot' },
 }
+
+if use_nix_blink then
+  load_runtime_plugin(blink_cmp_nix_path)
+else
+  table.insert(pack_specs, 1, blink_cmp_pack_spec())
+end
+
+vim.pack.add(pack_specs)
 
 local ok_copilot, blink_copilot = pcall(require, 'blink-copilot')
 if ok_copilot and type(blink_copilot.setup) == 'function' then
@@ -36,6 +57,12 @@ if ok_copilot and type(blink_copilot.setup) == 'function' then
 end
 
 require('blink.cmp').setup {
+  fuzzy = {
+    implementation = 'prefer_rust_with_warning',
+    prebuilt_binaries = {
+      download = vim.fn.executable 'nix' == 0,
+    },
+  },
   keymap = {
     preset = 'default',
 
@@ -200,6 +227,4 @@ require('blink.cmp').setup {
       ghost_text = { enabled = false },
     },
   },
-
-  fuzzy = { implementation = 'prefer_rust_with_warning' },
 }

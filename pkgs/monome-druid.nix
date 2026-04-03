@@ -54,4 +54,7 @@ in
       license = licenses.gpl3;
       authors = ["Dennis Smith <github.com/dennissmith>"];
     };
+
+    pyproject = true;
+    build-system = [ python3Packages.setuptools ];
   }

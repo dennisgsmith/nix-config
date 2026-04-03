@@ -32,10 +32,12 @@ in {
           "homebrew/homebrew-cask" = inputs.homebrew-cask;
         };
         mutableTaps = false;
-        package = inputs.nix-homebrew.inputs.brew-src // {
-          name = "brew-4.6.11";
-          version = "4.6.11";
-        };
+        package =
+          inputs.nix-homebrew.inputs.brew-src
+          // {
+            name = "brew-5.1.1";
+            version = "5.1.1";
+          };
       };
     }
     ../common/configuration.nix
@@ -85,11 +87,13 @@ in {
   homebrew = {
     enable = true;
     brews = [
-      "colima"
+      "lima"
     ];
     casks = [
       "discord"
+      "google-chrome"
       "obsidian"
+      "vivaldi"
       "slack"
       "spotify"
       "utm"

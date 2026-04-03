@@ -1,12 +1,15 @@
 # This file defines overlays
 {inputs, ...}: {
   nur = inputs.nur.overlays.default;
+  rust-overlay = inputs.rust-overlay.overlays.default;
+  # neovim-nightly-overlay = inputs.neovim-nightly-overlay.overlays.default;
 
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs {
-    pkgs = final;
-    inputs = inputs;
-  };
+  additions = final: _prev:
+    import ../pkgs {
+      pkgs = final;
+      inputs = inputs;
+    };
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
@@ -21,7 +24,7 @@
   # be accessible through 'pkgs.stable'
   stable-packages = final: _prev: {
     stable = import inputs.nixpkgs-stable {
-      hostPlatform = { system = final.system; };
+      hostPlatform = {system = final.system;};
       config.allowUnfree = true;
     };
   };

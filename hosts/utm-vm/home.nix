@@ -1,4 +1,8 @@
-{username, outputs, ...}: {
+{
+  username,
+  outputs,
+  ...
+}: {
   imports = [
     ../common/home.nix
     outputs.homeManagerModules.niri

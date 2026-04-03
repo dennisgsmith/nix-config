@@ -5,11 +5,10 @@
   ...
 }: let
   username = "dennissmith";
-  hostname = "personal-vm";
+  hostname = "utm-vm";
 in {
   imports = [
     ./hardware-configuration.nix
-    # inputs.stylix.nixosModules.stylix
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;
@@ -18,7 +17,6 @@ in {
       home-manager.extraSpecialArgs = {
         inherit inputs outputs username;
       };
-      home-manager.backupFileExtension = "hm.bak";
     }
     ../common/configuration.nix
     ../common/niri-vm.nix
@@ -26,14 +24,6 @@ in {
     ../common/locale.nix
     outputs.nixosModules.openssh
   ];
-
-  # stylix = {
-  #   enable = true;
-  #   autoEnable = false;
-  #   # image = "";
-  #   polarity = "dark";
-  #   base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-macchiato.yaml";
-  # };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -43,12 +33,13 @@ in {
 
   programs.zsh.enable = true;
 
+  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
     ${username} = {
       initialPassword = "pass";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEZCmGORbibeRZ322oOg+FNhUiBqqW4PEaYMRyLQ3yli dennisgsmith12@gmail.com"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNAgxIU4xd2QkO0ht5ljIqfYQn9IOMVW3C8HjN+iixE smith_dennis@bah.com"
       ];
       shell = pkgs.zsh;
       extraGroups = [
@@ -62,5 +53,6 @@ in {
     };
   };
 
+  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.11";
 }

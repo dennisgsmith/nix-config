@@ -5,10 +5,11 @@
   ...
 }: let
   username = "dennissmith";
-  hostname = "work-vm";
+  hostname = "nixos-lima-vm";
 in {
   imports = [
-    ./hardware-configuration.nix
+    (modulesPath + "/profiles/qemu-guest.nix")
+    outputs.nixos-lima.nixosModules.lima
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;
@@ -17,42 +18,57 @@ in {
       home-manager.extraSpecialArgs = {
         inherit inputs outputs username;
       };
+      home-manager.backupFileExtension = "hm.bak";
     }
     ../common/configuration.nix
-    ../common/niri-vm.nix
     ../common/docker.nix
     ../common/locale.nix
     outputs.nixosModules.openssh
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  services.lima.enable = true;
+
+  security = {
+    sudo.wheelNeedsPassword = false;
+  };
+
+  boot.loader.grub = {
+    device = "nodev";
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+  };
+  fileSystems."/boot" = {
+    device = lib.mkForce "/dev/vda1"; # /dev/disk/by-label/ESP
+    fsType = "vfat";
+  };
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+    fsType = "ext4";
+    options = ["noatime" "nodiratime" "discard"];
+  };
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = hostname;
   networking.networkmanager.enable = true;
 
   programs.zsh.enable = true;
 
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
     ${username} = {
       initialPassword = "pass";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNAgxIU4xd2QkO0ht5ljIqfYQn9IOMVW3C8HjN+iixE smith_dennis@bah.com"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEZCmGORbibeRZ322oOg+FNhUiBqqW4PEaYMRyLQ3yli dennisgsmith12@gmail.com"
       ];
       shell = pkgs.zsh;
       extraGroups = [
         "wheel"
         "docker"
         "networkmanager"
-        "video"
-        "input"
-        "seat"
       ];
     };
   };
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "23.11";
 }

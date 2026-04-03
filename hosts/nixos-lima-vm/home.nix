@@ -5,7 +5,8 @@
 }: {
   imports = [
     ../common/home.nix
-    outputs.homeManagerModules.niri
+    ../common/docker.nix
+    outputs.homeManagerModules.neovim-nixos-patch
   ];
 
   home = {
@@ -18,6 +19,11 @@
     settings.user = {
       name = "Dennis Smith";
       email = "dennisgsmith12@gmail.com";
+    };
+    extraConfig = {
+      safe = {
+        directory = ["/etc/nixos"];
+      };
     };
   };
 }

@@ -1,121 +1,133 @@
 {
   description = "nixos / nix-darwin / home manager configurations";
 
-inputs = {
-  nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-  nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
-
-  nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-  nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-
-  niri.url = "github:sodiboo/niri-flake";
-  stylix.url = "github:danth/stylix";
-
-  home-manager.url = "github:nix-community/home-manager";
-  home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-  nur.url = "github:nix-community/NUR";
-
-  # nix-homebrew with brew pinned to 4.6.11
-  nix-homebrew = {
-    url = "github:zhaofengli-wip/nix-homebrew";
-    inputs.brew-src.url = "github:Homebrew/brew/4.6.11";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nixos-lima = {
+      url = "github:nixos-lima/nixos-lima/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-homebrew = {
+      url = "github:zhaofengli-wip/nix-homebrew";
+      inputs.brew-src.url = "github:Homebrew/brew/5.1.1";
+    };
+    homebrew-bundle = {
+      url = "github:homebrew/homebrew-bundle";
+      flake = false;
+    };
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # neovim-nightly-overlay = {
+    #   url = "github:nix-community/neovim-nightly-overlay";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    blink-cmp = {
+      url = "github:saghen/blink.cmp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    niri.url = "github:sodiboo/niri-flake";
+    stylix.url = "github:danth/stylix";
   };
 
-  homebrew-bundle = {
-    url = "github:homebrew/homebrew-bundle";
-    flake = false;
-  };
-  homebrew-core = {
-    url = "github:homebrew/homebrew-core";
-    flake = false;
-  };
-  homebrew-cask = {
-    url = "github:homebrew/homebrew-cask";
-    flake = false;
-  };
-};
+  outputs = { self, nixpkgs, home-manager, nix-darwin, ... } @ inputs:
+    let
+      inherit (self) outputs;
+      systems = [
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+      username = "dennissmith";
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    nix-darwin,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-
-    # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "aarch64-linux"
-      "aarch64-darwin"
-    ];
-
-    # This is a function that generates an attribute by calling a function you
-    # pass to it, with each system as an argument
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-    username = "dennissmith";
-  in {
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system:
-      import ./pkgs {
-        inherit inputs;
-        pkgs = import nixpkgs { hostPlatform = system; };
-      });
-
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
-
-    nixosModules = import ./modules/nixos;
-    darwinModules = import ./modules/darwin;
-    homeManagerModules = import ./modules/home-manager;
-
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      personal-vm = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/personal-vm/configuration.nix];
+      mkPkgs = system: import nixpkgs {
+        hostPlatform = system;
+        config.allowUnfree = true;
       };
-      work-vm = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/work-vm/configuration.nix];
+
+    in {
+      packages = forAllSystems (system:
+        import ./pkgs {
+          inherit inputs;
+          pkgs = mkPkgs system;
+        });
+
+      formatter = forAllSystems (system:
+        nixpkgs.legacyPackages.${system}.alejandra
+      );
+
+      overlays = import ./overlays { inherit inputs; };
+
+      nixosModules = import ./modules/nixos;
+      darwinModules = import ./modules/darwin;
+      homeManagerModules = import ./modules/home-manager;
+
+      nixosConfigurations = {
+        nixos-lima-vm = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/nixos-lima-vm/configuration.nix ];
+        };
+
+        utm-vm = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [ ./hosts/utm-vm/configuration.nix ];
+        };
+      };
+
+      darwinConfigurations = {
+        personal-mbp = nix-darwin.lib.darwinSystem {
+          specialArgs = { inherit inputs outputs; };
+          system = "aarch64-darwin";
+          modules = [ ./hosts/personal-mbp/configuration.nix ];
+        };
+      };
+
+      homeConfigurations = {
+        "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { hostPlatform = "aarch64-darwin"; };
+          extraSpecialArgs = { inherit inputs outputs username; };
+          modules = [ ./hosts/personal-mbp/home.nix ];
+        };
+
+        "${username}@nixos-lima-vm" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
+          extraSpecialArgs = { inherit inputs outputs username; };
+          modules = [ ./hosts/nixos-lima-vm/home.nix ];
+        };
+
+        "${username}@utm-vm" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
+          extraSpecialArgs = { inherit inputs outputs username; };
+          modules = [ ./hosts/utm-vm/home.nix ];
+        };
+
+        "${username}@container" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
+          extraSpecialArgs = { inherit inputs outputs username; };
+          modules = [ ./hosts/container/home.nix ];
+        };
       };
     };
-
-    # Nix-darwin configuration entrypoint
-    # Available through 'darwin-rebuild switch --flake .#your-hostname'
-    darwinConfigurations = {
-      personal-mbp = nix-darwin.lib.darwinSystem {
-        specialArgs = {inherit inputs outputs;};
-        system = "aarch64-darwin";
-        modules = [./hosts/personal-mbp/configuration.nix];
-      };
-    };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { hostPlatform = "aarch64-darwin"; };
-        extraSpecialArgs = {inherit inputs outputs username;};
-        modules = [./hosts/personal-mbp/home.nix];
-      };
-      "${username}@personal-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
-        extraSpecialArgs = {inherit inputs outputs username;};
-        modules = [./hosts/personal-vm/home.nix];
-      };
-      "${username}@work-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
-        extraSpecialArgs = {inherit inputs outputs username;};
-        modules = [./hosts/work-vm/home.nix];
-      };
-    };
-  };
 }

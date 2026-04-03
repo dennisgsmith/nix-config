@@ -17,11 +17,15 @@ local function get_mason_pkg_path(name)
   return mason_registry.get_package(name):get_install_path()
 end
 
+local function is_file(path)
+  return path ~= nil and path ~= '' and vim.fn.filereadable(vim.fn.expand(path)) == 1
+end
+
 local function first_readable(paths)
   for _, path in ipairs(paths) do
     if path and path ~= '' then
       local expanded = vim.fn.expand(path)
-      if vim.fn.filereadable(expanded) == 1 then
+      if is_file(expanded) then
         return expanded
       end
     end
@@ -37,14 +41,8 @@ local function get_lombok_jar()
     if found then
       return found
     end
-  end
 
-  local nix_env_path = vim.env.NIX_LOMBOK_JAR
-  if nix_env_path and nix_env_path ~= '' then
-    local found = first_readable { nix_env_path }
-    if found then
-      return found
-    end
+    vim.notify(string.format('LOMBOK_JAR is set but not readable: %s', env_path), vim.log.levels.WARN)
   end
 
   local mason_path = vim.fn.expand '$MASON/share/jdtls/lombok.jar'
@@ -100,12 +98,37 @@ local function capabilities()
   return caps
 end
 
+local function get_jdtls_bin()
+  local env_path = vim.env.JDTLS_BIN
+  if env_path and env_path ~= '' then
+    local found = first_readable { env_path }
+    if found then
+      return found
+    end
+
+    vim.notify(string.format('JDTLS_BIN is set but not readable: %s', env_path), vim.log.levels.WARN)
+  end
+
+  local exepath = vim.fn.exepath 'jdtls'
+  if exepath ~= '' then
+    return exepath
+  end
+
+  return nil
+end
+
 local function build_cmd_base()
-  local cmd = { vim.fn.exepath 'jdtls' }
+  local jdtls_bin = get_jdtls_bin()
+  if not jdtls_bin then
+    vim.notify('Could not resolve jdtls binary from JDTLS_BIN or PATH', vim.log.levels.WARN)
+    return nil
+  end
+
+  local cmd = { jdtls_bin }
   local lombok_jar = get_lombok_jar()
 
   if lombok_jar then
-    table.insert(cmd, string.format('--jvm-arg=-javaagent:%s', lombok_jar))
+    table.insert(cmd, '--jvm-arg=-javaagent:' .. lombok_jar)
   else
     vim.notify('Using jdtls without lombok support', vim.log.levels.WARN)
   end
@@ -154,7 +177,6 @@ local opts = {
   project_name = project_name,
   jdtls_config_dir = jdtls_config_dir,
   jdtls_workspace_dir = jdtls_workspace_dir,
-  cmd_base = build_cmd_base(),
   dap = { hotcodereplace = 'auto', config_overrides = {} },
   test = true,
   settings = {
@@ -168,9 +190,15 @@ local opts = {
   _capabilities = capabilities(),
 }
 
+opts.cmd_base = build_cmd_base()
+
 local bundles = collect_bundles(opts)
 
 local function attach_jdtls()
+  if not opts.cmd_base then
+    return
+  end
+
   local fname = vim.api.nvim_buf_get_name(0)
   local root = opts.root_dir(fname)
   if not root then

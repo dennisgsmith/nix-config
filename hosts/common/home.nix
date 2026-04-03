@@ -15,7 +15,6 @@ in {
     cli-config
     direnv
     neovim
-    ghostty
     zsh
   ];
 
@@ -35,7 +34,7 @@ in {
       cmake
       direnv
       gnumake
-      neofetch
+      fastfetch
       pandoc
       postgresql
       sqlite
