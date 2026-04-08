@@ -52,82 +52,81 @@
     stylix.url = "github:danth/stylix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, ... } @ inputs:
-    let
-      inherit (self) outputs;
-      systems = [
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
-      username = "dennissmith";
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    nix-darwin,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    systems = [
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    forAllSystems = nixpkgs.lib.genAttrs systems;
+    username = "dennissmith";
 
-      mkPkgs = system: import nixpkgs {
-        hostPlatform = system;
+    mkPkgs = platform:
+      import nixpkgs {
+        localSystem = {system = platform;};
         config.allowUnfree = true;
       };
-
-    in {
-      packages = forAllSystems (system:
+  in {
+    packages = forAllSystems (
+      platform:
         import ./pkgs {
           inherit inputs;
-          pkgs = mkPkgs system;
-        });
+          pkgs = mkPkgs platform;
+        }
+    );
 
-      formatter = forAllSystems (system:
-        nixpkgs.legacyPackages.${system}.alejandra
-      );
+    formatter = forAllSystems (platform: nixpkgs.legacyPackages.${platform}.alejandra);
 
-      overlays = import ./overlays { inherit inputs; };
+    overlays = import ./overlays {inherit inputs;};
 
-      nixosModules = import ./modules/nixos;
-      darwinModules = import ./modules/darwin;
-      homeManagerModules = import ./modules/home-manager;
+    nixosModules = import ./modules/nixos;
+    darwinModules = import ./modules/darwin;
+    homeManagerModules = import ./modules/home-manager;
 
-      nixosConfigurations = {
-        nixos-lima-vm = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/nixos-lima-vm/configuration.nix ];
-        };
-
-        utm-vm = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [ ./hosts/utm-vm/configuration.nix ];
-        };
+    nixosConfigurations = {
+      nixos-lima-vm = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./hosts/nixos-lima-vm/configuration.nix];
       };
 
-      darwinConfigurations = {
-        personal-mbp = nix-darwin.lib.darwinSystem {
-          specialArgs = { inherit inputs outputs; };
-          system = "aarch64-darwin";
-          modules = [ ./hosts/personal-mbp/configuration.nix ];
-        };
-      };
-
-      homeConfigurations = {
-        "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { hostPlatform = "aarch64-darwin"; };
-          extraSpecialArgs = { inherit inputs outputs username; };
-          modules = [ ./hosts/personal-mbp/home.nix ];
-        };
-
-        "${username}@nixos-lima-vm" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
-          extraSpecialArgs = { inherit inputs outputs username; };
-          modules = [ ./hosts/nixos-lima-vm/home.nix ];
-        };
-
-        "${username}@utm-vm" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
-          extraSpecialArgs = { inherit inputs outputs username; };
-          modules = [ ./hosts/utm-vm/home.nix ];
-        };
-
-        "${username}@container" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { hostPlatform = "aarch64-linux"; };
-          extraSpecialArgs = { inherit inputs outputs username; };
-          modules = [ ./hosts/container/home.nix ];
-        };
+      utm-vm = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./hosts/utm-vm/configuration.nix];
       };
     };
+
+    darwinConfigurations = {
+      personal-mbp = nix-darwin.lib.darwinSystem {
+        specialArgs = {inherit inputs outputs;};
+        system = "aarch64-darwin";
+        modules = [./hosts/personal-mbp/configuration.nix];
+      };
+    };
+
+    homeConfigurations = {
+      "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {hostPlatform = "aarch64-darwin";};
+        extraSpecialArgs = {inherit inputs outputs username;};
+        modules = [./hosts/personal-mbp/home.nix];
+      };
+
+      "${username}@nixos-lima-vm" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {hostPlatform = "aarch64-linux";};
+        extraSpecialArgs = {inherit inputs outputs username;};
+        modules = [./hosts/nixos-lima-vm/home.nix];
+      };
+
+      "${username}@utm-vm" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {hostPlatform = "aarch64-linux";};
+        extraSpecialArgs = {inherit inputs outputs username;};
+        modules = [./hosts/utm-vm/home.nix];
+      };
+    };
+  };
 }

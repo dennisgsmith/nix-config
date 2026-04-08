@@ -1,26 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let
-  build-dependent-pkgs = with pkgs;
-    [
-      acl
-      attr
-      bzip2
-      curl
-      libsodium
-      libssh
-      libxml2
-      openssl
-      stdenv.cc.cc
-      systemd
-      util-linux
-      xz
-      zlib
-      zstd
-      glib
-      libcxx
-    ];
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  build-dependent-pkgs = with pkgs; [
+    acl
+    attr
+    bzip2
+    curl
+    libsodium
+    libssh
+    libxml2
+    openssl
+    stdenv.cc.cc
+    systemd
+    util-linux
+    xz
+    zlib
+    zstd
+    glib
+    libcxx
+  ];
 
   makePkgConfigPath = x: makeSearchPathOutput "dev" "lib/pkgconfig" x;
   makeIncludePath = x: makeSearchPathOutput "dev" "include" x;
@@ -29,7 +31,7 @@ let
     name = "nvim-depends-library";
     paths = map lib.getLib build-dependent-pkgs;
     extraPrefix = "/lib/nvim-depends";
-    pathsToLink = [ "/lib" ];
+    pathsToLink = ["/lib"];
     ignoreCollisions = true;
   };
   nvim-depends-include = pkgs.buildEnv {
@@ -60,9 +62,11 @@ in {
     nvim-depends-pkgconfig
     ripgrep
   ];
-  home.extraOutputsToInstall = [ "nvim-depends" ];
-  home.shellAliases.nvim = (concatStringsSep " " buildEnv)
-    + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so " + "nvim";
+  home.extraOutputsToInstall = ["nvim-depends"];
+  home.shellAliases.nvim =
+    (concatStringsSep " " buildEnv)
+    + " SQLITE_CLIB_PATH=${pkgs.sqlite.out}/lib/libsqlite3.so "
+    + "nvim";
 
   programs.neovim = {
     enable = true;
@@ -71,20 +75,19 @@ in {
     withPython3 = true;
     withRuby = true;
 
-    extraPackages = with pkgs;
-      [
-        doq
-        sqlite
-        cargo
-        clang
-        cmake
-        gcc
-        gnumake
-        ninja
-        pkg-config
-        yarn
-      ];
+    extraPackages = with pkgs; [
+      doq
+      sqlite
+      cargo
+      clang
+      cmake
+      gcc
+      gnumake
+      ninja
+      pkg-config
+      yarn
+    ];
 
-    extraLuaPackages = ls: with ls; [ luarocks ];
+    extraLuaPackages = ls: with ls; [luarocks];
   };
 }

@@ -56,5 +56,5 @@ in
     };
 
     pyproject = true;
-    build-system = [ python3Packages.setuptools ];
+    build-system = [python3Packages.setuptools];
   }

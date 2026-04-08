@@ -7,8 +7,8 @@ local function has_nix()
 end
 
 local treesitter_nix_path = vim.env.NVIM_TREESITTER_NIX_PATH
-local treesitter_context_nix_path = vim.env.TREESITTER_CONTEXT_NIX_PATH
-local treesitter_textobjects_nix_path = vim.env.TREESITTER_TEXTOBJECTS_NIX_PATH
+local treesitter_context_nix_path = vim.env.NVIM_TREESITTER_CONTEXT_NIX_PATH
+local treesitter_textobjects_nix_path = vim.env.NVIM_TREESITTER_TEXTOBJECTS_NIX_PATH
 
 local use_nix_treesitter = has_nix() and path_exists(treesitter_nix_path)
 local use_nix_treesitter_context = has_nix() and path_exists(treesitter_context_nix_path)
@@ -62,11 +62,9 @@ vim.api.nvim_create_autocmd('PackChanged', {
   end,
 })
 
-require('nvim-treesitter').setup {
-  install_dir = vim.fn.stdpath 'data' .. '/site',
-}
+require('nvim-treesitter').setup()
 
-vim.api.nvim_create_autocmd({ 'BufWinEnter', 'FileType' }, {
+vim.api.nvim_create_autocmd('FileType', {
   callback = function(args)
     local b = args.buf
     if not vim.api.nvim_buf_is_valid(b) then
@@ -75,14 +73,16 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter', 'FileType' }, {
 
     local name = vim.api.nvim_buf_get_name(b)
     if name ~= '' then
-      local ok, st = pcall(vim.loop.fs_stat, name)
+      local ok, st = pcall(vim.uv.fs_stat, name)
       if ok and st and st.size > 1024 * 1024 then
         return
       end
     end
 
-    vim.bo[b].syntax = 'off'
-    pcall(vim.treesitter.start, b)
+    local ok = pcall(vim.treesitter.start, b)
+    if ok then
+      vim.bo[b].syntax = 'off'
+    end
   end,
 })
 

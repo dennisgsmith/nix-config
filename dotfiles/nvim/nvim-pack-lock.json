@@ -23,7 +23,7 @@
     },
     "blink.cmp": {
       "rev": "390d84be50cc0ae6d13f395af74bf75c2465400f",
-      "src": "https://github.com/saghen/blink.cmp"
+      "src": "/nix/store/nqmr6g7cqb88jfb9psl7x189r44gxbz0-vimplugin-blink.cmp-1.10.0"
     },
     "blink.compat": {
       "rev": "cd2d3a040b76ad0eeab9a3bba48bc4c2b9d703bf",
@@ -159,11 +159,6 @@
     "nvim-treesitter-context": {
       "rev": "adf4b6b0420b7be6c717ef0ac7993183d6c201b1",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
-    },
-    "nvim-treesitter-textobjects": {
-      "rev": "93d60a475f0b08a8eceb99255863977d3a25f310",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
-      "version": "'main'"
     },
     "obsidian.nvim": {
       "rev": "47063e6b94f2d491a601058de4eb79bc636cd543",

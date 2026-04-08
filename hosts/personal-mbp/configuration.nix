@@ -44,6 +44,8 @@ in {
     outputs.darwinModules.macosSettings
   ];
 
+  nix.package = pkgs.nixVersions.latest;
+
   programs.zsh.enable = true;
 
   users.users.${username} = {
