@@ -35,8 +35,8 @@ in {
         package =
           inputs.nix-homebrew.inputs.brew-src
           // {
-            name = "brew-5.1.1";
-            version = "5.1.1";
+            name = "brew-5.1.12";
+            version = "5.1.12";
           };
       };
     }

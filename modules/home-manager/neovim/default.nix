@@ -32,6 +32,7 @@ in {
   programs.neovim = {
     enable = true;
 
+    sideloadInitLua = true;
     withNodeJs = true;
     withPython3 = true;
     withRuby = true;
