@@ -1,11 +1,16 @@
-vim.pack.add {
+local pack_specs = {
   { src = 'https://github.com/obsidian-nvim/obsidian.nvim' },
-  { src = 'https://github.com/saghen/blink.cmp' },
   { src = 'https://github.com/nvim-telescope/telescope.nvim' },
   { src = 'https://github.com/folke/snacks.nvim' },
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
 }
+
+if vim.fn.executable 'nix' == 0 then
+  table.insert(pack_specs, { src = 'https://github.com/saghen/blink.cmp' })
+end
+
+vim.pack.add(pack_specs)
 
 local obsidian_loaded = false
 local render_markdown_loaded = false

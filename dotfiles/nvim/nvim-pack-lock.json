@@ -21,14 +21,9 @@
       "rev": "7ad8209b2f880a2840c94cdcd80ab4dc511d4f39",
       "src": "https://github.com/fang2hou/blink-copilot"
     },
-    "blink.cmp": {
-      "rev": "390d84be50cc0ae6d13f395af74bf75c2465400f",
-      "src": "/nix/store/nqmr6g7cqb88jfb9psl7x189r44gxbz0-vimplugin-blink.cmp-1.10.0"
-    },
     "blink.compat": {
       "rev": "cd2d3a040b76ad0eeab9a3bba48bc4c2b9d703bf",
-      "src": "https://github.com/saghen/blink.compat",
-      "version": "1.0.0 - 1.1.0"
+      "src": "https://github.com/saghen/blink.compat"
     },
     "codecompanion-history.nvim": {
       "rev": "eb99d256352144cf3b6a1c45608ec25544a0813d",
