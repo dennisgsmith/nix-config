@@ -2,6 +2,8 @@ local fbft = {
   lua = { 'stylua' },
   python = { 'ruff_organize_imports', 'ruff_format' },
   nix = { 'alejandra' },
+  sh = { 'shfmt' },
+  sql = {},
 }
 
 local prettier_fts = {
@@ -74,7 +76,7 @@ local function get_format_on_save_opts(bufnr)
   if vim.b[bufnr].format_on_save ~= nil then
     if vim.b[bufnr].format_on_save then
       return {
-        lsp_fallback = true,
+        lsp_format = 'fallback',
         timeout_ms = 2500,
       }
     end
@@ -88,7 +90,7 @@ local function get_format_on_save_opts(bufnr)
 
   if vim.g.format_on_save then
     return {
-      lsp_fallback = true,
+      lsp_format = 'fallback',
       timeout_ms = 2500,
     }
   end
@@ -106,6 +108,9 @@ local conform = require 'conform'
 conform.setup {
   formatters_by_ft = fbft,
   format_on_save = function(bufnr)
+    if vim.bo[bufnr].filetype == 'sql' then
+      return nil
+    end
     return get_format_on_save_opts(bufnr)
   end,
   formatters = {

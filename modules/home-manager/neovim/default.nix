@@ -70,6 +70,7 @@ in {
       hurl
       ruff
       alejandra
+      shfmt
     ])
     ++ [
       blinkCmpPkg

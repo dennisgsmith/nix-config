@@ -1,21 +1,21 @@
 vim.pack.add {
   { src = 'https://github.com/jbyuki/venn.nvim' },
-  { src = 'https://github.com/echasnovski/mini.move' },
+  -- { src = 'https://github.com/echasnovski/mini.move' },
   { src = 'https://github.com/lukas-reineke/indent-blankline.nvim' },
 }
 
-require('mini.move').setup {
-  mappings = {
-    left = '<M-h>',
-    right = '<M-l>',
-    down = '<M-j>',
-    up = '<M-k>',
-    line_left = '<M-h>',
-    line_right = '<M-l>',
-    line_down = '<M-j>',
-    line_up = '<M-k>',
-  },
-}
+-- require('mini.move').setup {
+--   mappings = {
+--     left = '<M-h>',
+--     right = '<M-l>',
+--     down = '<M-j>',
+--     up = '<M-k>',
+--     line_left = '<M-h>',
+--     line_right = '<M-l>',
+--     line_down = '<M-j>',
+--     line_up = '<M-k>',
+--   },
+-- }
 
 local function mode_label()
   local m = vim.api.nvim_get_mode().mode

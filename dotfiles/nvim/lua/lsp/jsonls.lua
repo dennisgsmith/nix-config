@@ -5,7 +5,9 @@ return {
     settings = {
       json = {
         schemas = require('schemastore').json.schemas {
-          select = { 'openapi.json' },
+          replace = {
+            ['openapi.json'] = 'file://' .. vim.fn.stdpath 'config' .. '/schemas/openapi-3.X.json',
+          },
         },
         validate = { enable = true },
       },
