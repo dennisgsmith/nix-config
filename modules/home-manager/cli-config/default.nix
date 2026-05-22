@@ -4,6 +4,13 @@
     settings.color.when = "never";
   };
 
+  programs.gh = {
+    enable = true;
+    settings = {
+      git_protocol = "ssh";
+    };
+  };
+
   home.shellAliases = {
     diff = "difft";
     search = "rg -p --glob '!node_modules/*'  $@";

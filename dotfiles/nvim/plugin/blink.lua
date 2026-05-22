@@ -23,23 +23,30 @@ end
 
 local function blink_cmp_pack_spec()
   return {
-    name = 'blink.cmp',
-    src = 'https://github.com/saghen/blink.cmp',
-    version = vim.version.range '1.0',
+    {
+      name = 'blink.lib',
+      src = 'https://github.com/saghen/blink.lib',
+    },
+    {
+      name = 'blink.cmp',
+      src = 'https://github.com/saghen/blink.cmp',
+    },
   }
 end
 
 local blink_cmp_nix_path = vim.env.BLINK_CMP_NIX_PATH
-local use_nix_blink = has_nix() and path_exists(blink_cmp_nix_path)
+local blink_lib_nix_path = vim.env.BLINK_LIB_NIX_PATH
+local use_nix_blink = has_nix() and path_exists(blink_cmp_nix_path) and path_exists(blink_lib_nix_path)
 
 local pack_specs = {
   { src = 'https://github.com/rafamadriz/friendly-snippets' },
-  { src = 'https://github.com/saghen/blink.compat', version = vim.version.range '1.0' },
+  { src = 'https://github.com/saghen/blink.compat' },
   { src = 'https://github.com/kristijanhusak/vim-dadbod-completion' },
   { src = 'https://github.com/fang2hou/blink-copilot' },
 }
 
 if use_nix_blink then
+  load_runtime_plugin(blink_lib_nix_path)
   load_runtime_plugin(blink_cmp_nix_path)
 else
   table.insert(pack_specs, 1, blink_cmp_pack_spec())
@@ -56,12 +63,13 @@ if ok_copilot and type(blink_copilot.setup) == 'function' then
   }
 end
 
+if vim.fn.executable 'nix' == 0 then
+  require('blink.cmp').download({ force = true, tags = '*' }):wait(60000)
+end
+
 require('blink.cmp').setup {
   fuzzy = {
     implementation = 'prefer_rust_with_warning',
-    prebuilt_binaries = {
-      download = vim.fn.executable 'nix' == 0,
-    },
   },
   keymap = {
     preset = 'default',
@@ -146,7 +154,7 @@ require('blink.cmp').setup {
         },
       },
 
-      direction_priority = function()
+      direction_priority = (function()
         local ctx = require('blink.cmp').get_context()
         local item = require('blink.cmp').get_selected_item()
 
@@ -163,7 +171,7 @@ require('blink.cmp').setup {
         end
 
         return { 's', 'n' }
-      end,
+      end)(),
     },
   },
 
