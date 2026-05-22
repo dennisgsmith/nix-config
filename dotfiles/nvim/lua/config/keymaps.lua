@@ -19,8 +19,6 @@ vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
 
 -- Diagnostics
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
@@ -33,6 +31,16 @@ vim.keymap.set('t', '<C-w>h', '<C-\\><C-N><C-w>h')
 vim.keymap.set('t', '<C-w>j', '<C-\\><C-N><C-w>j')
 vim.keymap.set('t', '<C-w>k', '<C-\\><C-N><C-w>k')
 vim.keymap.set('t', '<C-w>l', '<C-\\><C-N><C-w>l')
+
+vim.keymap.set('n', '<leader>d', function()
+  vim.cmd 'vsplit | terminal'
+  vim.cmd 'startinsert!'
+end, { desc = 'New vertical terminal window' })
+
+vim.keymap.set('n', '<leader>D', function()
+  vim.cmd 'split | terminal'
+  vim.cmd 'startinsert!'
+end, { desc = 'New horizontal terminal window' })
 
 -- Centering
 vim.keymap.set('n', '<C-d>', '<C-d>zz')

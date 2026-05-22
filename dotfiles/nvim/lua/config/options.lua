@@ -39,9 +39,22 @@ vim.o.timeoutlen = 300
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
--- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+-- cursor shapes
+vim.opt.guicursor = 'n-v-c-sm:block,' .. 'i-ci-ve:ver25,' .. 'r-cr-o:hor20,' .. 't:ver25,' .. 'a:blinkon0'
 
 -- Window split direction
 vim.cmd.set 'splitbelow'
 vim.cmd.set 'splitright'
+
+-- rounded borders on hover windows
+vim.o.winborder = 'rounded'
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.buf.hover {
+  border = 'rounded',
+}
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.buf.signature_help {
+  border = 'rounded',
+}
