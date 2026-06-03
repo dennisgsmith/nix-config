@@ -22,6 +22,7 @@ require('auto-dark-mode').setup {
     vim.o.background = 'dark'
     vim.cmd 'colorscheme terafox'
     vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#333333' })
+    vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'NONE' })
 
     require('gitsigns').refresh()
     vim.cmd 'redraw!'
@@ -36,6 +37,7 @@ require('auto-dark-mode').setup {
     vim.o.background = 'light'
     vim.cmd 'colorscheme dayfox'
     vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#cccccc' })
+    vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'NONE' })
 
     require('gitsigns').refresh()
     vim.cmd 'redraw!'

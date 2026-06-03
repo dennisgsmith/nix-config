@@ -6,9 +6,9 @@ local pack_specs = {
   { src = 'https://github.com/MeanderingProgrammer/render-markdown.nvim' },
 }
 
-if vim.fn.executable 'nix' == 0 then
-  table.insert(pack_specs, { src = 'https://github.com/saghen/blink.cmp' })
-end
+-- if vim.fn.executable 'nix' == 0 then
+--   table.insert(pack_specs, { src = 'https://github.com/saghen/blink.cmp' })
+-- end
 
 vim.pack.add(pack_specs)
 
@@ -55,7 +55,7 @@ local function load_obsidian()
     return
   end
 
-  packadd 'blink.cmp'
+  -- packadd 'blink.cmp'
   packadd 'telescope.nvim'
   packadd 'snacks.nvim'
   packadd 'nvim-treesitter'
