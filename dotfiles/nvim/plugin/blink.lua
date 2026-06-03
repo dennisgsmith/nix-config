@@ -30,6 +30,7 @@ local function blink_cmp_pack_spec()
     {
       name = 'blink.cmp',
       src = 'https://github.com/saghen/blink.cmp',
+      version = vim.version.range '1.0',
     },
   }
 end
@@ -49,7 +50,7 @@ if use_nix_blink then
   load_runtime_plugin(blink_lib_nix_path)
   load_runtime_plugin(blink_cmp_nix_path)
 else
-  table.insert(pack_specs, 1, blink_cmp_pack_spec())
+  vim.list_extend(pack_specs, blink_cmp_pack_spec())
 end
 
 vim.pack.add(pack_specs)
@@ -63,13 +64,9 @@ if ok_copilot and type(blink_copilot.setup) == 'function' then
   }
 end
 
-if vim.fn.executable 'nix' == 0 then
-  require('blink.cmp').download({ force = true, tags = '*' }):wait(60000)
-end
-
 require('blink.cmp').setup {
   fuzzy = {
-    implementation = 'prefer_rust_with_warning',
+    implementation = 'lua',
   },
   keymap = {
     preset = 'default',
@@ -154,24 +151,7 @@ require('blink.cmp').setup {
         },
       },
 
-      direction_priority = (function()
-        local ctx = require('blink.cmp').get_context()
-        local item = require('blink.cmp').get_selected_item()
-
-        if ctx == nil or item == nil then
-          return { 's', 'n' }
-        end
-
-        local item_text = item.textEdit ~= nil and item.textEdit.newText or item.insertText or item.label
-        local is_multi_line = item_text:find '\n' ~= nil
-
-        if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
-          vim.g.blink_cmp_upwards_ctx_id = ctx.id
-          return { 'n', 's' }
-        end
-
-        return { 's', 'n' }
-      end)(),
+      direction_priority = { 's', 'n' },
     },
   },
 
