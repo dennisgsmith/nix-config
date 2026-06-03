@@ -63,11 +63,15 @@ local fb_actions = require 'telescope._extensions.file_browser.actions'
 telescope.setup {
   defaults = {
     file_ignore_patterns = { 'node%_modules/.*', 'go/pkg/mod/*', '.DS_Store' },
-    layout_stategy = 'vertical',
+    layout_strategy = 'vertical',
     layout_config = {
-      width = 0.95,
-      height = 0.95,
-      preview_width = 0.55,
+      vertical = {
+        width = 0.95,
+        height = 0.95,
+      },
+      horizontal = {
+        preview_width = 0.55,
+      },
     },
     sorting_strategy = 'ascending',
     vimgrep_arguments = {
