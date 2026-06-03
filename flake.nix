@@ -44,13 +44,6 @@
     #   url = "github:nix-community/neovim-nightly-overlay";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    blink-cmp = {
-      url = "github:saghen/blink.cmp/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    blink-lib = {
-      follows = "blink-cmp/blink-lib";
-    };
     niri.url = "github:sodiboo/niri-flake";
     stylix.url = "github:danth/stylix";
   };

@@ -35,16 +35,7 @@ end
 M.get_python_venv_settings = get_python_venv_settings
 
 function M.get_capabilities(extra)
-  -- local capabilities = vim.tbl_deep_extend('force', vim.deepcopy(base_capabilities), require('blink.cmp').get_lsp_capabilities({}, false), {
-  --   textDocument = {
-  --     foldingRange = {
-  --       dynamicRegistration = false,
-  --       lineFoldingOnly = true,
-  --     },
-  --   },
-  -- }, extra or {})
-  --
-  return {}
+  return base_capabilities
 end
 
 function M.on_attach(_, bufnr)

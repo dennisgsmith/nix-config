@@ -8,7 +8,6 @@ local specs = {
 if not has_nix then
   table.insert(specs, { src = 'https://github.com/mason-org/mason.nvim' })
   table.insert(specs, { src = 'https://github.com/mason-org/mason-lspconfig.nvim' })
-  -- table.insert(specs, { src = 'https://github.com/saghen/blink.cmp' })
 end
 
 vim.pack.add(specs)
