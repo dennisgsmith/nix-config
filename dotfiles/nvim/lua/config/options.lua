@@ -42,7 +42,18 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.termguicolors = true
 
 -- cursor shapes
-vim.opt.guicursor = 'n-v-c-sm:block,' .. 'i-ci-ve:ver25,' .. 'r-cr-o:hor20,' .. 't:ver25,' .. 'a:blinkon0'
+vim.o.guicursor = 'n-v-c-sm:block,' .. 'i-ci-ve:ver25,' .. 'r-cr-o:hor20,' .. 't:ver25,' .. 'a:blinkon0'
+
+-- Autocomplete
+vim.o.autocomplete = true
+vim.opt.complete:append 'o'
+vim.opt.completeopt = { 'fuzzy', 'menuone', 'noselect' }
+vim.o.pumheight = 7
+vim.o.pumborder = 'rounded'
+
+vim.opt.wildmenu = true
+vim.opt.wildmode = { 'noselect:lastused', 'full' }
+vim.opt.wildoptions = { 'pum' }
 
 -- Window split direction
 vim.cmd.set 'splitbelow'

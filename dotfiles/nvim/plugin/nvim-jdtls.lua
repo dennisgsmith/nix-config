@@ -83,19 +83,7 @@ local function jdtls_workspace_dir(proj)
 end
 
 local function capabilities()
-  local base = vim.lsp.protocol.make_client_capabilities()
-  local caps = vim.tbl_deep_extend('force', base, require('blink.cmp').get_lsp_capabilities({}, false))
-
-  caps = vim.tbl_deep_extend('force', caps, {
-    textDocument = {
-      foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true,
-      },
-    },
-  })
-
-  return caps
+  return vim.lsp.protocol.make_client_capabilities()
 end
 
 local function get_jdtls_bin()

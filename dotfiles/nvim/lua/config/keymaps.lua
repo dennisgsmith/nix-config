@@ -56,6 +56,15 @@ vim.keymap.set('n', '<leader>tm', function()
   vim.o.mouse = enable and 'a' or ''
 end)
 
+-- Autocomplete
+vim.keymap.set('i', '<CR>', function()
+  if vim.fn.pumvisible() == 1 then
+    return '<C-y>'
+  end
+
+  return '<CR>'
+end, { expr = true, desc = 'Accept completion or newline' })
+
 -- Pane movement
 vim.keymap.set('n', '<M-h>', '<C-w>h')
 vim.keymap.set('n', '<M-j>', '<C-w>j')

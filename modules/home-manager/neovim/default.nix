@@ -6,8 +6,6 @@
   ...
 }: let
   system = pkgs.stdenv.hostPlatform.system;
-  blinkCmpPkg = inputs.blink-cmp.packages.${system}.blink-cmp;
-  blinkLibPkg = inputs.blink-lib.packages.${system}.default;
   treesitterPkg = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
   treesitterContextPkg = pkgs.vimPlugins.nvim-treesitter-context;
   treesitterTextobjectsPkg = pkgs.vimPlugins.nvim-treesitter-textobjects;
@@ -21,8 +19,6 @@ in {
     EDITOR = lib.mkForce "nvim";
     ALTERNATE_EDITOR = "vim";
 
-    BLINK_CMP_NIX_PATH = "${blinkCmpPkg}";
-    BLINK_LIB_NIX_PATH = "${blinkLibPkg}";
     NVIM_TREESITTER_NIX_PATH = "${treesitterPkg}";
     NVIM_TREESITTER_CONTEXT_NIX_PATH = "${treesitterContextPkg}";
     NVIM_TREESITTER_TEXTOBJECTS_NIX_PATH = "${treesitterTextobjectsPkg}";
@@ -72,10 +68,6 @@ in {
       alejandra
       shfmt
     ])
-    ++ [
-      blinkCmpPkg
-      blinkLibPkg
-    ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       pkgs.pngpaste
     ];

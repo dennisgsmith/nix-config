@@ -7,7 +7,7 @@
       else pkgs.ghostty;
   };
   home.packages = with pkgs; [
-    iosevka
+    nerd-fonts.iosevka
   ];
   xdg.configFile."ghostty/config".source = ./config;
 }
