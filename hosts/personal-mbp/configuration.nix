@@ -6,6 +6,7 @@
 }: let
   username = "dennissmith";
   hostname = "personal-mbp";
+  brewVersion = "6.0.1";
 in {
   imports = [
     # home-manager
@@ -35,8 +36,8 @@ in {
         package =
           inputs.nix-homebrew.inputs.brew-src
           // {
-            name = "brew-5.1.12";
-            version = "5.1.12";
+            name = "brew-${brewVersion}";
+            version = brewVersion;
           };
       };
     }
