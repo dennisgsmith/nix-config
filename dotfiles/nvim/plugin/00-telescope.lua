@@ -64,6 +64,9 @@ telescope.setup {
   defaults = {
     file_ignore_patterns = { 'node%_modules/.*', 'go/pkg/mod/*', '.DS_Store' },
     layout_strategy = 'vertical',
+    preview = {
+      treesitter = false,
+    },
     layout_config = {
       vertical = {
         width = 0.95,
