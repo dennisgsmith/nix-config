@@ -4,6 +4,13 @@ vim.pack.add {
   { src = 'https://github.com/kristijanhusak/vim-dadbod-completion' },
 }
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'sql', 'mysql', 'plsql' },
+  callback = function(args)
+    vim.bo[args.buf].omnifunc = 'vim_dadbod_completion#omni'
+  end,
+})
+
 vim.api.nvim_create_user_command('DBCompletionConnect', function(opts)
   local dbname = opts.args
   if dbname == '' then

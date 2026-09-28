@@ -35,41 +35,45 @@ for _, v in ipairs(prettier_fts) do
   fbft[v] = { 'prettierd' }
 end
 
-local function find_config_in_children(start_dir, config_names)
+local function find_config_upwards(start_dir, config_names)
   local uv = vim.uv or vim.loop
 
-  local function scan_dir(dir)
+  local function dir_has_config(dir)
     local handle = uv.fs_scandir(dir)
     if not handle then
-      return nil
+      return false
     end
 
     while true do
       local name, typ = uv.fs_scandir_next(handle)
       if not name then
-        break
+        return false
       end
-
-      local full_path = dir .. '/' .. name
 
       if typ == 'file' then
         for _, config in ipairs(config_names) do
           if name == config then
-            return dir
+            return true
           end
-        end
-      elseif typ == 'directory' then
-        local found = scan_dir(full_path)
-        if found then
-          return found
         end
       end
     end
-
-    return nil
   end
 
-  return scan_dir(start_dir)
+  local dir = start_dir
+  while dir do
+    if dir_has_config(dir) then
+      return dir
+    end
+
+    local parent = vim.fn.fnamemodify(dir, ':h')
+    if parent == dir then
+      return nil
+    end
+    dir = parent
+  end
+
+  return nil
 end
 
 local function get_format_on_save_opts(bufnr)
@@ -116,9 +120,9 @@ conform.setup {
   formatters = {
     prettierd = {
       command = 'prettierd',
-      cwd = function(ctx)
+      cwd = function(_config, ctx)
         local start_dir = vim.fn.fnamemodify(ctx.filename, ':h')
-        local config_dir = find_config_in_children(start_dir, prettier_config_files)
+        local config_dir = find_config_upwards(start_dir, prettier_config_files)
         return config_dir or start_dir
       end,
       require_cwd = false,

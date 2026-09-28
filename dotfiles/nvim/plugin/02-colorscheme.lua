@@ -6,42 +6,35 @@ vim.pack.add {
 }
 
 require('nightfox').setup {
-  options = {
-    transparent = true,
-  },
+  transparent = true,
 }
+
+local function apply_theme(name, background, separator)
+  vim.cmd 'hi clear'
+
+  if vim.fn.exists 'syntax_on' == 1 then
+    vim.cmd 'syntax reset'
+  end
+
+  vim.o.background = background
+  vim.cmd.colorscheme(name)
+
+  vim.api.nvim_set_hl(0, 'WinSeparator', { fg = separator })
+  vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'NONE' })
+  vim.api.nvim_set_hl(0, '@lsp.type.comment', { fg = 'NONE' })
+
+  require('gitsigns').refresh()
+  vim.cmd 'redraw!'
+end
 
 require('auto-dark-mode').setup {
   update_interval = 1000,
+
   set_dark_mode = function()
-    vim.cmd 'hi clear'
-    if vim.fn.exists 'syntax_on' == 1 then
-      vim.cmd 'syntax reset'
-    end
-
-    vim.o.background = 'dark'
-    vim.cmd 'colorscheme terafox'
-    vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#333333' })
-    vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'NONE' })
-    vim.api.nvim_set_hl(0, '@lsp.type.comment', { fg = 'NONE' })
-
-    require('gitsigns').refresh()
-    vim.cmd 'redraw!'
+    apply_theme('terafox', 'dark', '#333333')
   end,
 
   set_light_mode = function()
-    vim.cmd 'hi clear'
-    if vim.fn.exists 'syntax_on' == 1 then
-      vim.cmd 'syntax reset'
-    end
-
-    vim.o.background = 'light'
-    vim.cmd 'colorscheme dayfox'
-    vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#cccccc' })
-    vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'NONE' })
-    vim.api.nvim_set_hl(0, '@lsp.type.comment', { fg = 'NONE' })
-
-    require('gitsigns').refresh()
-    vim.cmd 'redraw!'
+    apply_theme('dayfox', 'light', '#cccccc')
   end,
 }
