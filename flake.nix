@@ -22,7 +22,7 @@
     };
     nix-homebrew = {
       url = "github:zhaofengli-wip/nix-homebrew";
-      inputs.brew-src.url = "github:Homebrew/brew/6.0.1";
+      inputs.brew-src.url = "github:Homebrew/brew/7.0.7";
     };
     homebrew-bundle = {
       url = "github:homebrew/homebrew-bundle";
@@ -87,13 +87,19 @@
 
     nixosConfigurations = {
       nixos-lima-vm = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/nixos-lima-vm/configuration.nix];
+        modules = [
+          ./hosts/nixos-lima-vm/configuration.nix
+        ];
       };
 
       utm-vm = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/utm-vm/configuration.nix];
+        modules = [
+          ./hosts/utm-vm/configuration.nix
+        ];
       };
     };
 
@@ -107,19 +113,19 @@
 
     homeConfigurations = {
       "${username}@personal-mbp" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {hostPlatform = "aarch64-darwin";};
+        pkgs = mkPkgs "aarch64-darwin";
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/personal-mbp/home.nix];
       };
 
       "${username}@nixos-lima-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {hostPlatform = "aarch64-linux";};
+        pkgs = mkPkgs "aarch64-linux";
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/nixos-lima-vm/home.nix];
       };
 
       "${username}@utm-vm" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {hostPlatform = "aarch64-linux";};
+        pkgs = mkPkgs "aarch64-linux";
         extraSpecialArgs = {inherit inputs outputs username;};
         modules = [./hosts/utm-vm/home.nix];
       };

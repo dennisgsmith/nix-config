@@ -9,6 +9,7 @@
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
 in {
   programs.home-manager.enable = true;
+  programs.git.settings.init.defaultBranch = "main";
 
   imports = with outputs.homeManagerModules; [
     bash

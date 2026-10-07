@@ -5,24 +5,26 @@
 }: {
   imports = [
     ../common/home.nix
-    ../common/docker.nix
     outputs.homeManagerModules.neovim-nixos-patch
   ];
 
   home = {
     inherit username;
     homeDirectory = "/home/${username}";
+    sessionVariables = {
+      TERM = "xterm-256color";
+    };
   };
 
   programs.git = {
     enable = true;
-    settings.user = {
-      name = "Dennis Smith";
-      email = "dennisgsmith12@gmail.com";
-    };
-    extraConfig = {
+    settings = {
       safe = {
         directory = ["/etc/nixos"];
+      };
+      user = {
+        name = "Dennis Smith";
+        email = "dennisgsmith12@gmail.com";
       };
     };
   };

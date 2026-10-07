@@ -6,7 +6,7 @@
 }: let
   username = "dennissmith";
   hostname = "personal-mbp";
-  brewVersion = "6.0.1";
+  brewVersion = "7.0.7";
 in {
   imports = [
     # home-manager
@@ -42,6 +42,8 @@ in {
       };
     }
     ../common/configuration.nix
+    ../common/docker-client.nix
+    ../common/lima.nix
     outputs.darwinModules.macosSettings
   ];
 
@@ -89,9 +91,6 @@ in {
 
   homebrew = {
     enable = true;
-    brews = [
-      "lima"
-    ];
     casks = [
       "discord"
       "google-chrome"

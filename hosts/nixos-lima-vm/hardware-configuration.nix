@@ -8,9 +8,7 @@
   modulesPath,
   ...
 }: {
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+  imports = [];
 
   boot.initrd.availableKernelModules = ["virtio_pci" "xhci_pci" "usbhid"];
   boot.initrd.kernelModules = [];
@@ -22,24 +20,24 @@
     fsType = "ext4";
   };
 
+  fileSystems."/mnt/lima-cidata" = {
+    device = "/dev/disk/by-uuid/2026-07-15-16-51-49-11";
+    fsType = "iso9660";
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/12CE-A600";
     fsType = "vfat";
     options = ["fmask=0022" "dmask=0022"];
   };
 
-  fileSystems."/mnt/lima-cidata" = {
-    device = "/dev/disk/by-uuid/2026-01-04-11-40-20-58";
-    fsType = "iso9660";
-  };
-
-  fileSystems."/Users/dennissmith" = {
-    device = "mount0";
+  fileSystems."/tmp/lima" = {
+    device = "lima-0811fed16985d25e";
     fsType = "virtiofs";
   };
 
-  fileSystems."/tmp/lima" = {
-    device = "mount1";
+  fileSystems."/Users/dennissmith" = {
+    device = "lima-5f83a41e0c5f89da";
     fsType = "virtiofs";
   };
 

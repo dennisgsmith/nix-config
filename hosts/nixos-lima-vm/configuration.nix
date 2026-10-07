@@ -7,9 +7,11 @@
   username = "dennissmith";
   hostname = "nixos-lima-vm";
 in {
+  nixpkgs.hostPlatform = "aarch64-linux";
+
   imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-    outputs.nixos-lima.nixosModules.lima
+    inputs.nixos-lima.nixosModules.lima
+
     inputs.home-manager.nixosModules.home-manager
     {
       home-manager.useGlobalPkgs = true;
@@ -20,54 +22,56 @@ in {
       };
       home-manager.backupFileExtension = "hm.bak";
     }
+
     ../common/configuration.nix
-    ../common/docker.nix
+    ../common/docker-client.nix
+    ../common/docker-server.nix
     ../common/locale.nix
     outputs.nixosModules.openssh
   ];
 
   services.lima.enable = true;
 
-  security = {
-    sudo.wheelNeedsPassword = false;
+  security.sudo.wheelNeedsPassword = false;
+
+  networking.hostName = hostname;
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+    options = [
+      "x-systemd.growfs"
+      "x-initrd.mount"
+      "noatime"
+      "nodiratime"
+      "discard"
+    ];
   };
 
+  fileSystems."/boot" = {
+    device = "/dev/vda1";
+    fsType = "vfat";
+  };
   boot.loader.grub = {
+    enable = true;
     device = "nodev";
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
-  fileSystems."/boot" = {
-    device = lib.mkForce "/dev/vda1"; # /dev/disk/by-label/ESP
-    fsType = "vfat";
-  };
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    autoResize = true;
-    fsType = "ext4";
-    options = ["noatime" "nodiratime" "discard"];
-  };
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  networking.hostName = hostname;
-  networking.networkmanager.enable = true;
 
   programs.zsh.enable = true;
 
-  users.users = {
-    ${username} = {
-      initialPassword = "pass";
-      isNormalUser = true;
-      openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEZCmGORbibeRZ322oOg+FNhUiBqqW4PEaYMRyLQ3yli dennisgsmith12@gmail.com"
-      ];
-      shell = pkgs.zsh;
-      extraGroups = [
-        "wheel"
-        "docker"
-        "networkmanager"
-      ];
-    };
+  users.users.${username} = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
+
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEZCmGORbibeRZ322oOg+FNhUiBqqW4PEaYMRyLQ3yli dennisgsmith12@gmail.com"
+    ];
   };
 
   system.stateVersion = "23.11";

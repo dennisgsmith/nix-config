@@ -8,4 +8,5 @@
   wezterm = import ./wezterm;
   ghostty = import ./ghostty;
   zsh = import ./zsh;
+  codex = import ./codex;
 }

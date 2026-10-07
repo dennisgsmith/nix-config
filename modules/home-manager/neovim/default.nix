@@ -1,11 +1,9 @@
 {
-  inputs,
   pkgs,
   config,
   lib,
   ...
 }: let
-  system = pkgs.stdenv.hostPlatform.system;
   treesitterPkg = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
   treesitterContextPkg = pkgs.vimPlugins.nvim-treesitter-context;
   treesitterTextobjectsPkg = pkgs.vimPlugins.nvim-treesitter-textobjects;
@@ -41,7 +39,7 @@ in {
       imagemagick
       ghostscript
       # need latex for snacks.image
-      texlive.combined.scheme-basic
+      texliveSmall
       tree-sitter
       tectonic
       mermaid-cli
@@ -68,7 +66,7 @@ in {
       alejandra
       shfmt
     ])
-    ++ lib.optionals pkgs.stdenv.isDarwin [
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       pkgs.pngpaste
     ];
 

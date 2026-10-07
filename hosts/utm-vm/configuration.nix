@@ -20,7 +20,8 @@ in {
     }
     ../common/configuration.nix
     ../common/niri-vm.nix
-    ../common/docker.nix
+    ../common/docker-client.nix
+    ../common/docker-server.nix
     ../common/locale.nix
     outputs.nixosModules.openssh
   ];

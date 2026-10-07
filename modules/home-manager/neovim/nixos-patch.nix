@@ -69,8 +69,6 @@ in {
     + "nvim";
 
   programs.neovim = {
-    enable = true;
-
     withNodeJs = true;
     withPython3 = true;
     withRuby = true;
