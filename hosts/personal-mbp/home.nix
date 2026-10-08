@@ -12,6 +12,9 @@
   home = {
     inherit username;
     homeDirectory = "/Users/${username}";
+    packages = [
+      outputs.packages.aarch64-darwin.monome-druid
+    ];
   };
 
   programs.git = {

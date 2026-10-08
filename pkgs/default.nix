@@ -4,5 +4,7 @@
   pkgs,
   inputs,
 }: {
-  monome-druid = pkgs.callPackage ./monome-druid.nix {};
+  monome-druid = pkgs.callPackage ./monome-druid.nix {
+    python3Packages = pkgs.python311Packages;
+  };
 }

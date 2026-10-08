@@ -7,6 +7,9 @@
   prompt_toolkit_v2 = python3Packages.buildPythonPackage {
     pname = "prompt-toolkit";
     version = "2.0.10";
+    pyproject = true;
+    build-system = [python3Packages.setuptools];
+
     src = fetchurl {
       url = "https://files.pythonhosted.org/packages/source/p/prompt_toolkit/prompt_toolkit-2.0.10.tar.gz";
       sha256 = "8Vr2j2bmZOqlWdSsipKBEe69X+2gwRc4tZmARSJIKds=";
@@ -34,7 +37,7 @@ in
     propagatedBuildInputs = with python3Packages; [
       prompt_toolkit_v2
       setuptools
-      setuptools_scm
+      setuptools-scm
       click
       packaging
       pyserial
@@ -47,6 +50,19 @@ in
       pytest
       pip
     ];
+
+    # Modern setuptools-scm handles archives without this obsolete plugin.
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace-fail '        "setuptools_scm_git_archive",' ""
+      substituteInPlace src/druid/__init__.py \
+        --replace-fail 'import pkg_resources' 'from importlib.metadata import version' \
+        --replace-fail '    from pkg_resources import get_distribution' "" \
+        --replace-fail 'get_distribution("monome-druid").version' 'version("monome-druid")'
+      # websockets >= 14 passes only the connection to server handlers.
+      substituteInPlace src/druid/server.py \
+        --replace-fail 'async def handle(self, websocket, path):' 'async def handle(self, websocket):'
+    '';
 
     meta = with lib; {
       description = "Terminal interface for crow";

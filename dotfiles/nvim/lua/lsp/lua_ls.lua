@@ -5,6 +5,7 @@ return {
     settings = {
       Lua = {
         runtime = { version = 'LuaJIT' },
+        workspace = { ignoreDir = { '.git', '**/types/crow' } },
         diagnostics = {
           globals = { 'vim', 'require' },
         },
